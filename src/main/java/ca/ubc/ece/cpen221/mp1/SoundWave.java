@@ -3,6 +3,7 @@ package ca.ubc.ece.cpen221.mp1;
 import ca.ubc.ece.cpen221.mp1.utils.HasSimilarity;
 import javazoom.jl.player.StdPlayer;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SoundWave implements HasSimilarity<SoundWave> {
@@ -28,6 +29,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public SoundWave(double[] lchannel, double[] rchannel) {
         // TODO: Implement this constructor
+
     }
 
     public SoundWave() {
@@ -56,6 +58,9 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public double[] getLeftChannel() {
         // TODO: Implement this
+        ArrayList leftChannel = new ArrayList();
+        getLength();
+
         return null; // change this
     }
 
@@ -67,10 +72,17 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public double[] getRightChannel() {
         // TODO: Implement this
+        getLength();
         return null; // change this
     }
 
 
+    /**
+     * Get length of the mp3 audio file by counting the number of seconds..
+     */
+    public double getLength(){
+      return double;
+    }
     /**
      * A simple main method to play an MP3 file. Note that MP3 files should
      * be encoded to use stereo channels and not mono channels for the sound to
