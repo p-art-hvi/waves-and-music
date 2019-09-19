@@ -130,7 +130,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public void append(SoundWave other) {
         // TODO: Implement this method.
-        
+        SoundWave soundWave = new SoundWave();
+        other.append(soundWave);
     }
 
     /**
