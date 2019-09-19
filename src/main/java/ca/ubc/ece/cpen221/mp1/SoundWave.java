@@ -115,6 +115,12 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public void append(double[] lchannel, double[] rchannel) {
         // TODO: Implement this method.
+        double[] appendedArray = new double[lchannel.length];
+
+        for(int i = 0; i < appendedArray.length; i++){
+            appendedArray[i] = lchannel[i] + rchannel[i];
+        }
+
     }
 
     /**
@@ -124,6 +130,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public void append(SoundWave other) {
         // TODO: Implement this method.
+        
     }
 
     /**
