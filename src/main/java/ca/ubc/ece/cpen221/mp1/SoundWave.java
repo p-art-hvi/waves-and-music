@@ -34,18 +34,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     public SoundWave(double[] lchannel, double[] rchannel) {
         // TODO: Implement this constructor
 
-        /*
-        double[][] soundWave = new double[2][rchannel.length];
-
-        for (int i = 0; i < lchannel.length; i++){
-            soundWave[0][i] = lchannel[i];
-        }
-
-        for (int j = 0; j < rchannel.length; j++){
-            soundWave[1][j] = rchannel[j];
-        }
-         */
-
     }
 
     public SoundWave() {
@@ -89,10 +77,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public double[] getRightChannel() {
         // TODO: Implement this
-        //List<Double> rchannelArr = new ArrayList<Double>();
-        //double[] rchannelArray
-        //Double[] rchannelArr = rchannel.toArray(new Double[rchannel.size()]);
-        //double[] rchannelArray = ArrayUtils.toPrimitive(rchannelArr);
 
         double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
         return rchannel; // change this
