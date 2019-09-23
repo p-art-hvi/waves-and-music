@@ -51,7 +51,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     public SoundWave() {
         // TODO: You should implement a default constructor
         // that creates an empty wave
-        double[] leftChannel = getLeftChannel();]
+        double[] leftChannel = getLeftChannel();
         double[] rightChannel = getRightChannel();
         this.soundWave = new ArrayList<Double>();
     }
@@ -77,7 +77,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public double[] getLeftChannel() {
         // TODO: Implement this
-        return null; // change this
+        double[] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+        return lchannel; // change this
     }
 
     /**
@@ -88,12 +89,13 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public double[] getRightChannel() {
         // TODO: Implement this
-        List<Double> rchannelArr = new ArrayList<Double>();
+        //List<Double> rchannelArr = new ArrayList<Double>();
+        //double[] rchannelArray
         //Double[] rchannelArr = rchannel.toArray(new Double[rchannel.size()]);
-
         //double[] rchannelArray = ArrayUtils.toPrimitive(rchannelArr);
 
-        return rchannelArray; // change this
+        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+        return rchannel; // change this
     }
 
     /**
