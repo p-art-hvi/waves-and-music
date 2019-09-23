@@ -19,6 +19,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     private ArrayList<Double> lchannel = new ArrayList<>();
     private ArrayList<Double> rchannel = new ArrayList<>();
     private int samples = 0;
+    private ArrayList<Double> soundWave = new ArrayList<>();
 
     /**
      * Create a new SoundWave using the provided left and right channel
@@ -30,14 +31,14 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public SoundWave(double[] lchannel, double[] rchannel) {
         // TODO: Implement this constructor
-        double[][] soundWave = new double[lchannel.length][];
+        double[][] soundWave = new double[2][rchannel.length];
 
         for (int i = 0; i < lchannel.length; i++){
-            soundWave[i][0] = lchannel[i];
+            soundWave[0][i] = lchannel[i];
         }
 
         for (int j = 0; j < rchannel.length; j++){
-            soundWave[j][1] = rchannel[j];
+            soundWave[1][j] = rchannel[j];
         }
 
     }
@@ -45,7 +46,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     public SoundWave() {
         // TODO: You should implement a default constructor
         // that creates an empty wave
-        double[][] soundWave = null;
+        this.soundWave = new ArrayList<Double>();
     }
 
     /**
@@ -115,12 +116,13 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public void append(double[] lchannel, double[] rchannel) {
         // TODO: Implement this method.
-        double[] appendedArray = new double[lchannel.length];
-
-        for(int i = 0; i < appendedArray.length; i++){
-            appendedArray[i] = lchannel[i] + rchannel[i];
+        for (int i = 0; i < lchannel.length; i++) {
+            this.lchannel.add(lchannel[i]);
         }
 
+        for (int i = 0; i < rchannel.length; i++) {
+            this.rchannel.add(rchannel[i]);
+        }
     }
 
     /**
@@ -137,9 +139,17 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     /**
      * Create a new wave by adding another wave to this wave.
      * (You should also write clear specifications for this method.)
+     * @param other the wave to superimpose/add
      */
     public SoundWave add(SoundWave other) {
         // TODO: Implement this method
+
+        //double[] appendedArray = new double[other.length];
+
+       // for(int i = 0; i < appendedArray.length; i++){
+       //     appendedArray[i] = lchannel[i] + rchannel[i];
+        //}
+
         return null; // change this
     }
 
