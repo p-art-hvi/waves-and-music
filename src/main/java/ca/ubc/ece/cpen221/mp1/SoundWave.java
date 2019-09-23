@@ -6,6 +6,8 @@ import javazoom.jl.player.StdPlayer;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SoundWave implements HasSimilarity<SoundWave> {
 
@@ -16,10 +18,10 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     public static final int SAMPLES_PER_SECOND = 44100;
 
     // some representation fields that you could use
-    private ArrayList<Double> lchannel = new ArrayList<>();
-    private ArrayList<Double> rchannel = new ArrayList<>();
+    private List<Double> lchannel = new ArrayList<Double>();
+    private List<Double> rchannel = new ArrayList<Double>();
     private int samples = 0;
-    private ArrayList<Double> soundWave = new ArrayList<>();
+    private List<Double> soundWave = new ArrayList<Double>();
 
     /**
      * Create a new SoundWave using the provided left and right channel
@@ -31,6 +33,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public SoundWave(double[] lchannel, double[] rchannel) {
         // TODO: Implement this constructor
+
+        /*
         double[][] soundWave = new double[2][rchannel.length];
 
         for (int i = 0; i < lchannel.length; i++){
@@ -40,12 +44,15 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         for (int j = 0; j < rchannel.length; j++){
             soundWave[1][j] = rchannel[j];
         }
+         */
 
     }
 
     public SoundWave() {
         // TODO: You should implement a default constructor
         // that creates an empty wave
+        double[] leftChannel = getLeftChannel();]
+        double[] rightChannel = getRightChannel();
         this.soundWave = new ArrayList<Double>();
     }
 
@@ -81,7 +88,12 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public double[] getRightChannel() {
         // TODO: Implement this
-        return null; // change this
+        List<Double> rchannelArr = new ArrayList<Double>();
+        //Double[] rchannelArr = rchannel.toArray(new Double[rchannel.size()]);
+
+        //double[] rchannelArray = ArrayUtils.toPrimitive(rchannelArr);
+
+        return rchannelArray; // change this
     }
 
     /**
