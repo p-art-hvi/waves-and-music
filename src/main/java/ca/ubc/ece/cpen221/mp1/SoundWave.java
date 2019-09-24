@@ -175,14 +175,51 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public SoundWave add(SoundWave other) {
         // TODO: Implement this method
+        double[] rchannelA = getRightChannel();
+        ArrayList<Double> rchannelA1 = new ArrayList(Arrays.asList(rchannelA));
+        double[] lchannelB = getLeftChannel();
+        ArrayList<Double> lchannelB1 = new ArrayList(Arrays.asList(lchannelB));
 
-        //double[] appendedArray = new double[other.length];
+        double[] rOtherChannel = other.getRightChannel();
+        ArrayList<Double> rOtherChannel1 = new ArrayList(Arrays.asList(rOtherChannel));
+        double[] lOtherChannel = other.getLeftChannel();
+        ArrayList<Double> lOtherChannel1 = new ArrayList(Arrays.asList(lOtherChannel));
 
-       // for(int i = 0; i < appendedArray.length; i++){
-       //     appendedArray[i] = lchannel[i] + rchannel[i];
-        //}
+        int sizeRight = 0;
+        int sizeLeft = 0;
 
-        return null; // change this
+        if(rchannelA1.size() < rOtherChannel1.size() || rchannelA1.size() == rOtherChannel1.size()){
+            sizeRight = rchannelA1.size();
+        }
+        else{
+            sizeRight = rOtherChannel1.size();
+        }
+
+        if(lchannelB1.size() < lOtherChannel1.size() || lchannelB1.size() == lOtherChannel1.size()){
+            sizeLeft = lchannelB1.size();
+        }
+        else {
+            sizeLeft = lOtherChannel1.size();
+        }
+
+        for(int i = 0; i < sizeRight; i++){
+            double addValue = 0;
+            addValue = rchannelA1.get(i) + rOtherChannel1.get(i);
+            rchannel.add(addValue);
+        }
+
+        for(int i = 0; i < sizeLeft; i++){
+            double addValue = 0;
+            addValue = lchannelB1.get(i) + lOtherChannel1.get(i);
+            lchannel.add(addValue);
+        }
+
+        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+        double[] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+
+        SoundWave soundWave = new SoundWave(lchannel, rchannel);
+        
+        return soundWave; // change this
     }
 
     /**
