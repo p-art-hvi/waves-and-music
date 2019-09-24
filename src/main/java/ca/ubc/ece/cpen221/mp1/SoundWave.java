@@ -109,6 +109,39 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     /**
      * Append a wave to this wave.
      *
+     * @param other the wave to append.
+     */
+    public void append(SoundWave other) {
+        // TODO: Implement this method.
+        double[] rchannelOG = getRightChannel();
+        ArrayList<Double> rchannelOG1 = new ArrayList(Arrays.asList(rchannelOG));
+        double[] lchannelOG = getLeftChannel();
+        ArrayList<Double> lchannelOG1 = new ArrayList(Arrays.asList(lchannelOG));
+
+        double[] rchannel2 = other.getRightChannel();
+        ArrayList<Double> rchannel22 = new ArrayList(Arrays.asList(rchannel2));
+        double[] lchannel2 = other.getLeftChannel();
+        ArrayList<Double> lchannel22 = new ArrayList(Arrays.asList(lchannel2));
+
+        for (int i = 0; i < rchannel22.size(); i++){
+            rchannelOG1.add(rchannel22.get(i));
+        }
+
+        rchannel = rchannelOG1;
+
+        for (int i = 0; i < lchannel22.size(); i++){
+            lchannelOG1.add(lchannel22.get(i));
+        }
+
+        lchannel = lchannelOG1;
+        //soundWave.addAll(other);
+        //SoundWave soundWave = new SoundWave();
+        //other.append(soundWave);
+    }
+
+    /**
+     * Append a wave to this wave.
+     *
      * @param lchannel
      * @param rchannel
      */
@@ -121,17 +154,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         for (int i = 0; i < rchannel.length; i++) {
             this.rchannel.add(rchannel[i]);
         }
-    }
-
-    /**
-     * Append a wave to this wave.
-     *
-     * @param other the wave to append.
-     */
-    public void append(SoundWave other) {
-        // TODO: Implement this method.
-        SoundWave soundWave = new SoundWave();
-        other.append(soundWave);
     }
 
     /**
