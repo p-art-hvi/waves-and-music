@@ -28,5 +28,8 @@ public class BasicTests {
     }
 
     // TODO: add more tests
+    @Test
+    public void append(double[] lchannel, double[] rchannel){
 
+    }
 }
