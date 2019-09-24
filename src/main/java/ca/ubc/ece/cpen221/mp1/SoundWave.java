@@ -21,7 +21,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     private List<Double> lchannel = new ArrayList<Double>();
     private List<Double> rchannel = new ArrayList<Double>();
     private int samples = 0;
-    private List<Double> soundWave = new ArrayList<Double>();
 
     /**
      * Create a new SoundWave using the provided left and right channel
@@ -33,15 +32,17 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public SoundWave(double[] lchannel, double[] rchannel) {
         // TODO: Implement this constructor
+        this.rchannel = new ArrayList<>();
+        this.lchannel = new ArrayList<>();
+        append(lchannel, rchannel);
 
     }
 
     public SoundWave() {
         // TODO: You should implement a default constructor
         // that creates an empty wave
-        double[] leftChannel = getLeftChannel();
-        double[] rightChannel = getRightChannel();
-        this.soundWave = new ArrayList<Double>();
+        this.rchannel = new ArrayList<>();
+        this.lchannel = new ArrayList<>();
     }
 
     /**
@@ -55,6 +56,17 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public SoundWave(double freq, double phase, double amplitude, double duration) {
         // TODO: Implement this constructor
+        double time = 0;
+        this.rchannel = new ArrayList<>();
+        this.lchannel = new ArrayList<>();
+
+        //TODO: check plus or minus phase
+        for (time = 0; time <= duration; time = time + 1/SAMPLES_PER_SECOND) {
+            double omega = 2 * Math.PI * freq * time;
+            double y_value = amplitude * Math.sin(omega + phase);
+            rchannel.add(y_value);
+            lchannel.add(y_value);
+        }
     }
 
     /**

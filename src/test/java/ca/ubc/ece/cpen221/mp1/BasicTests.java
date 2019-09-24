@@ -17,6 +17,16 @@ public class BasicTests {
         Assert.assertArrayEquals(rchannel, rchannel1, 0.00001);
     }
 
+    @Test
+    public void testWaveFromScratch() {
+        double freq = 70;
+        double amp = .5;
+        double phase = 2;
+        double duration = 5;
+
+        //TODO: complete test case
+    }
+
     // TODO: add more tests
 
 }
