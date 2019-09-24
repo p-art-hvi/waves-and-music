@@ -194,7 +194,19 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public SoundWave addEcho(int delta, double alpha) {
         // TODO: Implement this method
-        return null; // change this
+        ArrayList<Double> lEcho = new ArrayList<>();
+        ArrayList<Double> rEcho = new ArrayList<>();
+
+        for (int i = 0; i < delta * SAMPLES_PER_SECOND; i++) {
+            lEcho.add(lchannel.get(i));
+        }
+
+        for (int i = delta * SAMPLES_PER_SECOND; i < lchannel.size(); i++) {
+            double echoValue = lchannel.get(i) + lchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
+            lEcho.add(echoValue);
+        }
+
+       // return null; // change this
     }
 
     /**
