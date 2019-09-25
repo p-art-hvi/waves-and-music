@@ -61,7 +61,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         this.lchannel = new ArrayList<>();
 
         //TODO: check plus or minus phase
-        for (time = 0; time <= duration; time = time + 1/SAMPLES_PER_SECOND) {
+        for (time = 0; time <= duration; time = time + 1.0 / (double) SAMPLES_PER_SECOND) {
             double omega = 2 * Math.PI * freq * time;
             double y_value = amplitude * Math.sin(omega + phase);
             rchannel.add(y_value);
@@ -243,6 +243,35 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public void scale(double scalingFactor) {
         // TODO: Implement this method.
+        int max = 1;
+        int min = -1;
+        ArrayList<Double> lScaled = new ArrayList<>();
+        ArrayList<Double> rScaled = new ArrayList<>();
+
+        for (int i = 0; i < lchannel.size(); i++) {
+            double scaledVal = scalingFactor * lchannel.get(i);
+            if (scaledVal >= max) {
+                lScaled.add(1.0);
+            } if (scaledVal <= min) {
+                lScaled.add(-1.0);
+            } else {
+                lScaled.add(scaledVal);
+            }
+        }
+
+        for (int i = 0; i < rchannel.size(); i++) {
+            double scaledVal = scalingFactor * rchannel.get(i);
+            if (scaledVal >= max) {
+                rScaled.add(1.0);
+            } if (scaledVal <= min) {
+                rScaled.add(-1.0);
+            } else {
+                rScaled.add(scaledVal);
+            }
+        }
+
+        lchannel = lScaled;
+        rchannel = rScaled;
     }
 
     /**
