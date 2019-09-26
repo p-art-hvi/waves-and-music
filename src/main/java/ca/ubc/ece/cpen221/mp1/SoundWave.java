@@ -223,7 +223,11 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         lchannel = lEcho;
         rchannel = rEcho;
 
-       return null; // change this
+        double [] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+
+        SoundWave soundWave = new SoundWave(lchannel, rchannel);
+       return soundWave; // change this
     }
 
     /**
