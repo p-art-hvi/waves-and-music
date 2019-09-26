@@ -11,10 +11,6 @@ import java.util.List;
 
 public class SoundWave implements HasSimilarity<SoundWave> {
 
-    // We are going to treat the number of samples per second of a sound wave
-    // as a constant.
-    // The best way to refer to this constant is as
-    // SoundWave.SAMPLES_PER_SECOND.
     public static final int SAMPLES_PER_SECOND = 44100;
 
     // some representation fields that you could use
@@ -76,9 +72,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return an array that represents the left channel for this wave.
      */
     public double[] getLeftChannel() {
-        // TODO: Implement this
         double[] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        return lchannel; // change this
+        return lchannel;
     }
 
     /**
@@ -125,30 +120,27 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public void append(SoundWave other) {
         // TODO: Implement this method.
-        double[] rchannelOG = getRightChannel();
-        ArrayList<Double> rchannelOG1 = new ArrayList(Arrays.asList(rchannelOG));
-        double[] lchannelOG = getLeftChannel();
-        ArrayList<Double> lchannelOG1 = new ArrayList(Arrays.asList(lchannelOG));
+        double[] rChannelOne = getRightChannel();
+        ArrayList<Double> rChannelOneArray = new ArrayList(Arrays.asList(rChannelOne));
+        double[] lChannelOne = getLeftChannel();
+        ArrayList<Double> lChannelOneArray = new ArrayList(Arrays.asList(lChannelOne));
 
-        double[] rchannel2 = other.getRightChannel();
-        ArrayList<Double> rchannel22 = new ArrayList(Arrays.asList(rchannel2));
-        double[] lchannel2 = other.getLeftChannel();
-        ArrayList<Double> lchannel22 = new ArrayList(Arrays.asList(lchannel2));
+        double[] rChannelTwo = other.getRightChannel();
+        ArrayList<Double> rChannelTwoArray = new ArrayList(Arrays.asList(rChannelTwo));
+        double[] lChannelTwo = other.getLeftChannel();
+        ArrayList<Double> lChannelTwoArray = new ArrayList(Arrays.asList(lChannelTwo));
 
-        for (int i = 0; i < rchannel22.size(); i++){
-            rchannelOG1.add(rchannel22.get(i));
+        for (int i = 0; i < rChannelTwoArray.size(); i++){
+            rChannelOneArray.add(rChannelTwoArray.get(i));
         }
 
-        rchannel = rchannelOG1;
+        rchannel = rChannelOneArray;
 
-        for (int i = 0; i < lchannel22.size(); i++){
-            lchannelOG1.add(lchannel22.get(i));
+        for (int i = 0; i < lChannelTwoArray.size(); i++){
+            lChannelOneArray.add(lChannelTwoArray.get(i));
         }
 
-        lchannel = lchannelOG1;
-        //soundWave.addAll(other);
-        //SoundWave soundWave = new SoundWave();
-        //other.append(soundWave);
+        lchannel = lChannelOneArray;
     }
 
     /**
@@ -158,7 +150,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @param rchannel
      */
     public void append(double[] lchannel, double[] rchannel) {
-        // TODO: Implement this method.
+
         for (int i = 0; i < lchannel.length; i++) {
             this.lchannel.add(lchannel[i]);
         }
@@ -219,7 +211,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
         SoundWave soundWave = new SoundWave(lchannel, rchannel);
         
-        return soundWave; // change this
+        return soundWave;
     }
 
     /**
@@ -264,7 +256,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
 
         SoundWave soundWave = new SoundWave(lchannel, rchannel);
-       return soundWave; // change this
+       return soundWave; 
     }
 
     /**
