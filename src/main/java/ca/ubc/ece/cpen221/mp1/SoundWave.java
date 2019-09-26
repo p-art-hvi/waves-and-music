@@ -230,8 +230,41 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return a new sound wave with an echo.
      */
     public SoundWave addEcho(int delta, double alpha) {
-        // TODO: Implement this method
-        return null; // change this
+        // TODO: create a test for this method
+        ArrayList<Double> lEcho = new ArrayList<>();
+        ArrayList<Double> rEcho = new ArrayList<>();
+
+        for (int i = 0; i < delta * SAMPLES_PER_SECOND; i++) {
+            lEcho.add(lchannel.get(i));
+            rEcho.add(rchannel.get(i));
+        }
+
+        for (int i = delta * SAMPLES_PER_SECOND; i < lchannel.size(); i++) {
+            double echoValue = lchannel.get(i) + lchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
+            lEcho.add(echoValue);
+        }
+
+        for (int i = lchannel.size(); i < lchannel.size() + delta * SAMPLES_PER_SECOND; i++) {
+            lEcho.add(lchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha);
+        }
+
+        for (int i = delta * SAMPLES_PER_SECOND; i < rchannel.size(); i++) {
+            double echoValue = rchannel.get(i) + rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
+            rEcho.add(echoValue);
+        }
+
+        for (int i = rchannel.size(); i < rchannel.size() + delta * SAMPLES_PER_SECOND; i++) {
+            rEcho.add(rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha);
+        }
+
+        lchannel = lEcho;
+        rchannel = rEcho;
+
+        double [] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+
+        SoundWave soundWave = new SoundWave(lchannel, rchannel);
+       return soundWave; // change this
     }
 
     /**
