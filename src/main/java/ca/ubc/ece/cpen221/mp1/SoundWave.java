@@ -59,9 +59,9 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         //TODO: check plus or minus phase
         for (time = 0; time <= duration; time = time + 1.0 / (double) SAMPLES_PER_SECOND) {
             double omega = 2 * Math.PI * freq * time;
-            double y_value = amplitude * Math.sin(omega + phase);
-            rchannel.add(y_value);
-            lchannel.add(y_value);
+            double yValue = amplitude * Math.sin(omega + phase);
+            rchannel.add(yValue);
+            lchannel.add(yValue);
         }
     }
 
@@ -130,13 +130,13 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] lChannelTwo = other.getLeftChannel();
         ArrayList<Double> lChannelTwoArray = new ArrayList(Arrays.asList(lChannelTwo));
 
-        for (int i = 0; i < rChannelTwoArray.size(); i++){
+        for (int i = 0; i < rChannelTwoArray.size(); i++) {
             rChannelOneArray.add(rChannelTwoArray.get(i));
         }
 
         rchannel = rChannelOneArray;
 
-        for (int i = 0; i < lChannelTwoArray.size(); i++){
+        for (int i = 0; i < lChannelTwoArray.size(); i++) {
             lChannelOneArray.add(lChannelTwoArray.get(i));
         }
 
@@ -180,27 +180,27 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         int sizeRight = 0;
         int sizeLeft = 0;
 
-        if(rchannelA1.size() < rOtherChannel1.size() || rchannelA1.size() == rOtherChannel1.size()){
+        if (rchannelA1.size() < rOtherChannel1.size()
+                || rchannelA1.size() == rOtherChannel1.size()) {
             sizeRight = rchannelA1.size();
-        }
-        else{
+        } else {
             sizeRight = rOtherChannel1.size();
         }
 
-        if(lchannelB1.size() < lOtherChannel1.size() || lchannelB1.size() == lOtherChannel1.size()){
+        if (lchannelB1.size() < lOtherChannel1.size()
+                || lchannelB1.size() == lOtherChannel1.size()) {
             sizeLeft = lchannelB1.size();
-        }
-        else {
+        } else {
             sizeLeft = lOtherChannel1.size();
         }
 
-        for(int i = 0; i < sizeRight; i++){
+        for (int i = 0; i < sizeRight; i++) {
             double addValue = 0;
             addValue = rchannelA1.get(i) + rOtherChannel1.get(i);
             rchannel.add(addValue);
         }
 
-        for(int i = 0; i < sizeLeft; i++){
+        for (int i = 0; i < sizeLeft; i++) {
             double addValue = 0;
             addValue = lchannelB1.get(i) + lOtherChannel1.get(i);
             lchannel.add(addValue);
@@ -232,7 +232,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         }
 
         for (int i = delta * SAMPLES_PER_SECOND; i < lchannel.size(); i++) {
-            double echoValue = lchannel.get(i) + lchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
+            double echoValue = lchannel.get(i)
+                    + lchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
             lEcho.add(echoValue);
         }
 
@@ -241,7 +242,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         }
 
         for (int i = delta * SAMPLES_PER_SECOND; i < rchannel.size(); i++) {
-            double echoValue = rchannel.get(i) + rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
+            double echoValue = rchannel.get(i)
+                    + rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
             rEcho.add(echoValue);
         }
 
@@ -256,7 +258,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
 
         SoundWave soundWave = new SoundWave(lchannel, rchannel);
-       return soundWave; 
+        return soundWave;
     }
 
     /**
@@ -277,7 +279,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             double scaledVal = scalingFactor * lchannel.get(i);
             if (scaledVal >= max) {
                 lScaled.add(1.0);
-            } if (scaledVal <= min) {
+            } else if (scaledVal <= min) {
                 lScaled.add(-1.0);
             } else {
                 lScaled.add(scaledVal);
@@ -288,7 +290,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             double scaledVal = scalingFactor * rchannel.get(i);
             if (scaledVal >= max) {
                 rScaled.add(1.0);
-            } if (scaledVal <= min) {
+            } else if (scaledVal <= min) {
                 rScaled.add(-1.0);
             } else {
                 rScaled.add(scaledVal);
