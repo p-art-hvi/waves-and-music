@@ -63,6 +63,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             rchannel.add(yValue);
             lchannel.add(yValue);
         }
+
     }
 
     /**
