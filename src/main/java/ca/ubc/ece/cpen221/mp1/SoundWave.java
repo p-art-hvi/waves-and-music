@@ -73,8 +73,13 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return an array that represents the left channel for this wave.
      */
     public double[] getLeftChannel() {
-        double[] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        return lchannel;
+        double[] newLchannel = new double[this.lchannel.size()];
+
+        for (int i = 0; i < newLchannel.length; i++) {
+            newLchannel[i] = lchannel.get(i);
+        }
+
+        return newLchannel;
     }
 
     /**
@@ -84,10 +89,12 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return an array that represents the right channel for this wave.
      */
     public double[] getRightChannel() {
-        // TODO: Implement this
+        double[] newRchannel = new double[this.rchannel.size()];
 
-        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        return rchannel; // change this
+        for (int i = 0; i < newRchannel.length; i++) {
+            newRchannel[i] = rchannel.get(i);
+        }
+        return newRchannel;
     }
 
     /**
@@ -120,28 +127,25 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @param other the wave to append.
      */
     public void append(SoundWave other) {
-        // TODO: Implement this method.
-        double[] rChannelOne = getRightChannel();
-        ArrayList<Double> rChannelOneArray = new ArrayList(Arrays.asList(rChannelOne));
-        double[] lChannelOne = getLeftChannel();
-        ArrayList<Double> lChannelOneArray = new ArrayList(Arrays.asList(lChannelOne));
 
         double[] rChannelTwo = other.getRightChannel();
-        ArrayList<Double> rChannelTwoArray = new ArrayList(Arrays.asList(rChannelTwo));
+        List<Double> rChannelTwoArray = new ArrayList<Double>();
         double[] lChannelTwo = other.getLeftChannel();
-        ArrayList<Double> lChannelTwoArray = new ArrayList(Arrays.asList(lChannelTwo));
+        ArrayList<Double> lChannelTwoArray = new ArrayList<Double>();
 
-        for (int i = 0; i < rChannelTwoArray.size(); i++) {
-            rChannelOneArray.add(rChannelTwoArray.get(i));
+
+       for (int i = 0; i < rChannelTwo.length; i++) {
+          rChannelTwoArray.add(rChannelTwo[i]);
         }
 
-        rchannel = rChannelOneArray;
-
-        for (int i = 0; i < lChannelTwoArray.size(); i++) {
-            lChannelOneArray.add(lChannelTwoArray.get(i));
+        for (int i = 0; i < lChannelTwo.length; i++) {
+            lChannelTwoArray.add(lChannelTwo[i]);
         }
 
-        lchannel = lChannelOneArray;
+        rchannel.addAll(rchannel.size(), rChannelTwoArray);
+
+        lchannel.addAll(lchannel.size(), lChannelTwoArray);
+
     }
 
     /**
@@ -167,50 +171,59 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @param other the wave to superimpose/add
      */
     public SoundWave add(SoundWave other) {
-        // TODO: Implement this method
         double[] rchannelA = getRightChannel();
-        ArrayList<Double> rchannelA1 = new ArrayList(Arrays.asList(rchannelA));
-        double[] lchannelB = getLeftChannel();
-        ArrayList<Double> lchannelB1 = new ArrayList(Arrays.asList(lchannelB));
-
+        double[] lchannelA = getLeftChannel();
         double[] rOtherChannel = other.getRightChannel();
-        ArrayList<Double> rOtherChannel1 = new ArrayList(Arrays.asList(rOtherChannel));
         double[] lOtherChannel = other.getLeftChannel();
-        ArrayList<Double> lOtherChannel1 = new ArrayList(Arrays.asList(lOtherChannel));
-
         int sizeRight = 0;
         int sizeLeft = 0;
 
-        if (rchannelA1.size() < rOtherChannel1.size()
-                || rchannelA1.size() == rOtherChannel1.size()) {
-            sizeRight = rchannelA1.size();
+        if (rchannelA.length >= rOtherChannel.length) {
+            sizeRight = rchannelA.length;
         } else {
-            sizeRight = rOtherChannel1.size();
+            sizeRight = rOtherChannel.length;
         }
 
-        if (lchannelB1.size() < lOtherChannel1.size()
-                || lchannelB1.size() == lOtherChannel1.size()) {
-            sizeLeft = lchannelB1.size();
+        if (lchannelA.length >= lOtherChannel.length) {
+            sizeLeft = lchannelA.length;
         } else {
-            sizeLeft = lOtherChannel1.size();
+            sizeLeft = lOtherChannel.length;
         }
 
-        for (int i = 0; i < sizeRight; i++) {
-            double addValue = 0;
-            addValue = rchannelA1.get(i) + rOtherChannel1.get(i);
-            rchannel.add(addValue);
+        double[] rNewChannel = new double[sizeRight];
+        double[] lNewChannel = new double[sizeLeft];
+
+        for (int i = 0; i < rchannelA.length && i < rOtherChannel.length; i++) {
+            double addValue = rchannelA[i] + rOtherChannel[i];
+            rNewChannel[i] = addValue;
         }
 
-        for (int i = 0; i < sizeLeft; i++) {
-            double addValue = 0;
-            addValue = lchannelB1.get(i) + lOtherChannel1.get(i);
-            lchannel.add(addValue);
+        for (int i = 0; i < lchannelA.length && i < lOtherChannel.length; i++) {
+            double addValue = lchannelA[i] + lOtherChannel[i];
+            lNewChannel[i] = addValue;
         }
 
-        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        double[] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+        if (lchannelA.length > lOtherChannel.length) {
+            for (int i = lOtherChannel.length; i < lchannelA.length; i++) {
+                lNewChannel[i] = lchannelA[i];
+            }
+        } else if (lchannelA.length < lOtherChannel.length) {
+            for (int i = lchannelA.length; i < lOtherChannel.length; i++) {
+                lNewChannel[i] = lOtherChannel[i];
+            }
+        }
 
-        SoundWave soundWave = new SoundWave(lchannel, rchannel);
+        if (rchannelA.length > rOtherChannel.length) {
+            for (int i = rOtherChannel.length; i < rchannelA.length; i++) {
+                rNewChannel[i] = rchannelA[i];
+            }
+        } else if (rchannelA.length < rOtherChannel.length) {
+            for (int i = rchannelA.length; i < rOtherChannel.length; i++) {
+                rNewChannel[i] = rOtherChannel[i];
+            }
+        }
+
+        SoundWave soundWave = new SoundWave(lNewChannel, rNewChannel);
         
         return soundWave;
     }
@@ -252,14 +265,19 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             rEcho.add(rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha);
         }
 
-        lchannel = lEcho;
-        rchannel = rEcho;
+        double[] lEchoArray = new double[lEcho.size()];
+        double[] rEchoArray = new double[rEcho.size()];
 
-        double [] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+        for (int i = 0; i < lEchoArray.length; i++) {
+            lEchoArray[i] = lEcho.get(i);
+        }
+        for (int i = 0; i < rEchoArray.length; i++) {
+            rEchoArray[i] = rEcho.get(i);
+        }
 
-        SoundWave soundWave = new SoundWave(lchannel, rchannel);
-        return soundWave;
+        SoundWave echo = new SoundWave(lEchoArray, rEchoArray);
+
+        return echo;
     }
 
     /**
