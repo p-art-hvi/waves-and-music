@@ -336,7 +336,34 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public SoundWave highPassFilter(int dt, double RC) {
         // TODO: Implement this
-        return null; // change this
+        //for the right channel...
+        double[] channelR = new double[rchannel.size()];
+        channelR = getRightChannel();
+
+        double[] arrayR = new double[channelR.length];
+
+        double alpha = RC / (RC + dt);
+
+        arrayR[0] = channelR[0];
+
+        for (int i = 1; i < channelR.length; i++){
+            arrayR[i] = alpha * arrayR[i-1] + alpha * (channelR[i] - channelR[i - 1]);
+        }
+
+        //for the left channel...
+        double[] channelL = new double[lchannel.size()];
+        channelL = getLeftChannel();
+
+        double[] arrayL = new double[channelL.length];
+
+        arrayL[0] = channelL[0];
+
+        for (int i = 1; i < channelL.length; i++){
+            arrayL[i] = alpha * arrayL[i-1] + alpha * (channelL[i] - channelL[i - 1]);
+        }
+
+        SoundWave soundWave = new SoundWave(arrayL, arrayR);
+        return soundWave; // change this
     }
 
     /**
