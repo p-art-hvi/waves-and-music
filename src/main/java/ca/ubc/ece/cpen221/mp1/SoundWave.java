@@ -11,6 +11,7 @@ import java.util.List;
 
 public class SoundWave implements HasSimilarity<SoundWave> {
 
+    public static final double PI = 3.14156;
     public static final int SAMPLES_PER_SECOND = 44100;
 
     // some representation fields that you could use
@@ -353,6 +354,25 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public double highAmplitudeFreqComponent() {
         // TODO: Implement this method
+        //implement the DFT algorithm...
+        //get the frequencies as an array for rchannel...
+        double[] channelR;
+        channelR = getRightChannel();
+
+        double[] frequencyR = new double[rchannel.size()];
+
+        int N = rchannel.size();
+
+        for(int k = 0; k < N - 1; k++){
+            for(int t = 0; t < N - 1; t++){
+                //for complexNumber we need to create a complexNumber type? complexNumber class?
+                //what is k??????????
+                frequencyR[k] = channelR[t] * (cos(2*PI*k*t) - complexNumber*sin((2*PI*k*t)/N));
+            }
+        }
+
+        //get the frequencies as an array for lchannel...
+
         return -1; // change this
     }
 
@@ -366,7 +386,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public boolean contains(SoundWave other) {
         // TODO: Implement this method
-        return true; // change this
+        return false; // change this
     }
 
     /**
