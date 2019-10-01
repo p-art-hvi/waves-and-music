@@ -73,14 +73,13 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return an array that represents the left channel for this wave.
      */
     public double[] getLeftChannel() {
-       // double[] lchannel = this.lchannel.stream().mapToDouble(Double::doubleValue).toArray();
-        double[] newlchannel = new double[this.lchannel.size()];
+        double[] newLchannel = new double[this.lchannel.size()];
 
-        for (int i = 0; i < newlchannel.length; i++) {
-            newlchannel[i] = lchannel.get(i);
+        for (int i = 0; i < newLchannel.length; i++) {
+            newLchannel[i] = lchannel.get(i);
         }
 
-        return newlchannel;
+        return newLchannel;
     }
 
     /**
@@ -90,10 +89,12 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return an array that represents the right channel for this wave.
      */
     public double[] getRightChannel() {
-        // TODO: Implement this
+        double[] newRchannel = new double[this.rchannel.size()];
 
-        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        return rchannel;
+        for (int i = 0; i < newRchannel.length; i++) {
+            newRchannel[i] = rchannel.get(i);
+        }
+        return newRchannel;
     }
 
     /**
@@ -170,27 +171,20 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @param other the wave to superimpose/add
      */
     public SoundWave add(SoundWave other) {
-        // TODO: Implement this method
         double[] rchannelA = getRightChannel();
-       // ArrayList<Double> rchannelA1 = new ArrayList(Arrays.asList(rchannelA));
         double[] lchannelA = getLeftChannel();
-       // ArrayList<Double> lchannelB1 = new ArrayList(Arrays.asList(lchannelB));
-
         double[] rOtherChannel = other.getRightChannel();
-       // ArrayList<Double> rOtherChannel1 = new ArrayList(Arrays.asList(rOtherChannel));
         double[] lOtherChannel = other.getLeftChannel();
-       // ArrayList<Double> lOtherChannel1 = new ArrayList(Arrays.asList(lOtherChannel));
-
         int sizeRight = 0;
         int sizeLeft = 0;
 
-        if (rchannelA.length <= rOtherChannel.length) {
+        if (rchannelA.length >= rOtherChannel.length) {
             sizeRight = rchannelA.length;
         } else {
             sizeRight = rOtherChannel.length;
         }
 
-        if (lchannelA.length <= lOtherChannel.length) {
+        if (lchannelA.length >= lOtherChannel.length) {
             sizeLeft = lchannelA.length;
         } else {
             sizeLeft = lOtherChannel.length;
@@ -200,14 +194,12 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] lNewChannel = new double[sizeLeft];
 
         for (int i = 0; i < rchannelA.length && i < rOtherChannel.length; i++) {
-            double addValue = 0;
-            addValue = rchannelA[i] + rOtherChannel[i];
+            double addValue = rchannelA[i] + rOtherChannel[i];
             rNewChannel[i] = addValue;
         }
 
         for (int i = 0; i < lchannelA.length && i < lOtherChannel.length; i++) {
-            double addValue = 0;
-            addValue = lchannelA[i] + lOtherChannel[i];
+            double addValue = lchannelA[i] + lOtherChannel[i];
             lNewChannel[i] = addValue;
         }
 
@@ -230,9 +222,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
                 rNewChannel[i] = rOtherChannel[i];
             }
         }
-
-       // double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        //double[] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
 
         SoundWave soundWave = new SoundWave(lNewChannel, rNewChannel);
         
@@ -276,14 +265,19 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             rEcho.add(rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha);
         }
 
-        lchannel = lEcho;
-        rchannel = rEcho;
+        double[] lEchoArray = new double[lEcho.size()];
+        double[] rEchoArray = new double[rEcho.size()];
 
-        double [] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
+        for (int i = 0; i < lEchoArray.length; i++) {
+            lEchoArray[i] = lEcho.get(i);
+        }
+        for (int i = 0; i < rEchoArray.length; i++) {
+            rEchoArray[i] = rEcho.get(i);
+        }
 
-        SoundWave soundWave = new SoundWave(lchannel, rchannel);
-        return soundWave;
+        SoundWave echo = new SoundWave(lEchoArray, rEchoArray);
+
+        return echo;
     }
 
     /**

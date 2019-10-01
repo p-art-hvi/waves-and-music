@@ -99,9 +99,43 @@ public class BasicTests {
         double[] lchannelAdd = {.5, .1, .1, -.5};
         double[] rchannelAdd = {1.0, .1, .15, -.5};
         double[] lchannelAdded = {1.5, 0.6, -0.4, -1.5};
-        double[] rchannelAdded = {2, .3, -.15, -1.5}
+        double[] rchannelAdded = {2, .3, -.15, -1.5};
 
-        soun
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+        SoundWave toAdd = new SoundWave(lchannelAdd, rchannelAdd);
+
+        wave =  wave.add(toAdd);
+
+        double[] lchannel1 = wave.getLeftChannel();
+
+        double[] rchannel1 = wave.getRightChannel();
+
+        Assert.assertArrayEquals(rchannelAdded, rchannel1, 0.00001);
+        Assert.assertArrayEquals(lchannelAdded, lchannel1, 0.00001);
+
+    }
+
+    @Test
+    public void testAdd1() {
+        double[] lchannel = {1.0, 0.5, -0.5, -1.0, 1.0};
+        double[] rchannel = {1.0, 0.2, -0.3, -1.0};
+        double[] lchannelAdd = {.5, .1, .1, -.5};
+        double[] rchannelAdd = {1.0, .1, .15, -.5};
+        double[] lchannelAdded = {1.5, 0.6, -0.4, -1.5, 1.0};
+        double[] rchannelAdded = {2, .3, -.15, -1.5};
+
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+        SoundWave toAdd = new SoundWave(lchannelAdd, rchannelAdd);
+
+        wave =  wave.add(toAdd);
+
+        double[] lchannel1 = wave.getLeftChannel();
+
+        double[] rchannel1 = wave.getRightChannel();
+
+        Assert.assertArrayEquals(rchannelAdded, rchannel1, 0.00001);
+        Assert.assertArrayEquals(lchannelAdded, lchannel1, 0.00001);
+
     }
 }
 
