@@ -107,7 +107,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      *
      * @param args are currently ignored but you could be creative.
      */
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         File file = new File("mp3/anger.mp3");
         StdPlayer.open("mp3/anger.mp3");
         SoundWave sw = new SoundWave();
@@ -119,7 +119,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
         sw.sendToStereoSpeaker();
         StdPlayer.close();
-    }
+    } */
 
     /**
      * Append a wave to this wave.
@@ -331,6 +331,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     public SoundWave highPassFilter(int dt, double RC) {
         // TODO: Implement this
         return null; // change this
+
     }
 
     /**
