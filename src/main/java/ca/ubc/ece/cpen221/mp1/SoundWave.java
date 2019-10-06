@@ -2,6 +2,7 @@ package ca.ubc.ece.cpen221.mp1;
 
 import ca.ubc.ece.cpen221.mp1.utils.ComplexNumber;
 import ca.ubc.ece.cpen221.mp1.utils.HasSimilarity;
+import ca.ubc.ece.cpen221.mp1.utils.HelperMethods;
 import javazoom.jl.player.StdPlayer;
 
 import java.io.File;
@@ -40,8 +41,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     public SoundWave() {
         // TODO: You should implement a default constructor
         // that creates an empty wave
-        this.rchannel = new ArrayList<>();
-        this.lchannel = new ArrayList<>();
+        //this.rchannel = new ArrayList<>();
+        //this.lchannel = new ArrayList<>();
     }
 
     /**
@@ -178,56 +179,11 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] lchannelA = getLeftChannel();
         double[] rOtherChannel = other.getRightChannel();
         double[] lOtherChannel = other.getLeftChannel();
-        int sizeRight = 0;
-        int sizeLeft = 0;
 
-        if (rchannelA.length >= rOtherChannel.length) {
-            sizeRight = rchannelA.length;
-        } else {
-            sizeRight = rOtherChannel.length;
-        }
-
-        if (lchannelA.length >= lOtherChannel.length) {
-            sizeLeft = lchannelA.length;
-        } else {
-            sizeLeft = lOtherChannel.length;
-        }
-
-        double[] rNewChannel = new double[sizeRight];
-        double[] lNewChannel = new double[sizeLeft];
-
-        for (int i = 0; i < rchannelA.length && i < rOtherChannel.length; i++) {
-            double addValue = rchannelA[i] + rOtherChannel[i];
-            rNewChannel[i] = addValue;
-        }
-
-        for (int i = 0; i < lchannelA.length && i < lOtherChannel.length; i++) {
-            double addValue = lchannelA[i] + lOtherChannel[i];
-            lNewChannel[i] = addValue;
-        }
-
-        if (lchannelA.length > lOtherChannel.length) {
-            for (int i = lOtherChannel.length; i < lchannelA.length; i++) {
-                lNewChannel[i] = lchannelA[i];
-            }
-        } else if (lchannelA.length < lOtherChannel.length) {
-            for (int i = lchannelA.length; i < lOtherChannel.length; i++) {
-                lNewChannel[i] = lOtherChannel[i];
-            }
-        }
-
-        if (rchannelA.length > rOtherChannel.length) {
-            for (int i = rOtherChannel.length; i < rchannelA.length; i++) {
-                rNewChannel[i] = rchannelA[i];
-            }
-        } else if (rchannelA.length < rOtherChannel.length) {
-            for (int i = rchannelA.length; i < rOtherChannel.length; i++) {
-                rNewChannel[i] = rOtherChannel[i];
-            }
-        }
+        double[] rNewChannel = HelperMethods.add(rchannelA, rOtherChannel);
+        double[] lNewChannel = HelperMethods.add(lchannelA,lOtherChannel);
 
         SoundWave soundWave = new SoundWave(lNewChannel, rNewChannel);
-        
         return soundWave;
     }
 
@@ -248,35 +204,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             rEcho.add(rchannel.get(i));
         }
 
-        for (int i = delta * SAMPLES_PER_SECOND; i < lchannel.size(); i++) {
-            double echoValue = lchannel.get(i)
-                    + lchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
-            lEcho.add(echoValue);
-        }
-
-        for (int i = lchannel.size(); i < lchannel.size() + delta * SAMPLES_PER_SECOND; i++) {
-            lEcho.add(lchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha);
-        }
-
-        for (int i = delta * SAMPLES_PER_SECOND; i < rchannel.size(); i++) {
-            double echoValue = rchannel.get(i)
-                    + rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
-            rEcho.add(echoValue);
-        }
-
-        for (int i = rchannel.size(); i < rchannel.size() + delta * SAMPLES_PER_SECOND; i++) {
-            rEcho.add(rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha);
-        }
-
-        double[] lEchoArray = new double[lEcho.size()];
-        double[] rEchoArray = new double[rEcho.size()];
-
-        for (int i = 0; i < lEchoArray.length; i++) {
-            lEchoArray[i] = lEcho.get(i);
-        }
-        for (int i = 0; i < rEchoArray.length; i++) {
-            rEchoArray[i] = rEcho.get(i);
-        }
+        double[] lEchoArray = HelperMethods.addEcho(delta, lEcho, SAMPLES_PER_SECOND, alpha, lchannel);
+        double[] rEchoArray = HelperMethods.addEcho(delta, rEcho, SAMPLES_PER_SECOND, alpha, rchannel);
 
         SoundWave echo = new SoundWave(lEchoArray, rEchoArray);
 

@@ -112,7 +112,6 @@ public class BasicTests {
 
         Assert.assertArrayEquals(rchannelAdded, rchannel1, 0.00001);
         Assert.assertArrayEquals(lchannelAdded, lchannel1, 0.00001);
-
     }
 
     @Test
