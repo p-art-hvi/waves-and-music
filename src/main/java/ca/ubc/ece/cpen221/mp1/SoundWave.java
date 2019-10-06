@@ -1,5 +1,6 @@
 package ca.ubc.ece.cpen221.mp1;
 
+import ca.ubc.ece.cpen221.mp1.utils.ComplexNumber;
 import ca.ubc.ece.cpen221.mp1.utils.HasSimilarity;
 import javazoom.jl.player.StdPlayer;
 
@@ -8,6 +9,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.lang.Math;
 
 public class SoundWave implements HasSimilarity<SoundWave> {
 
@@ -362,18 +364,53 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] frequencyR = new double[rchannel.size()];
 
         int N = rchannel.size();
+        ComplexNumber highestFreqRight = new ComplexNumber(0.0, 0.0);
+        ComplexNumber highestFreqLeft = new ComplexNumber(0.0, 0.0);
 
         for(int k = 0; k < N - 1; k++){
             for(int t = 0; t < N - 1; t++){
-                //for complexNumber we need to create a complexNumber type? complexNumber class?
-                //what is k??????????
-                frequencyR[k] = channelR[t] * (cos(2*PI*k*t) - complexNumber*sin((2*PI*k*t)/N));
+                //implement a complex number type.
+                //k is frequency
+                double imaginaryPart = Math.sin((2*PI*k*t)/N);
+                double realPart = Math.cos(2*PI*k*t);
+                ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
+                ComplexNumber newFreq = new ComplexNumber();
+                newFreq = ComplexNumber.multiply(complexNumber, channelR[t]);
+
+                //determine the highest frequency using the modulus of the complex number frequencies
+                //i.e. find the magnitudes of the frequencies then compare them.
+                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreqRight)){
+                    highestFreqRight = newFreq;
+                }
             }
         }
 
         //get the frequencies as an array for lchannel...
+        for(int k = 0; k < N - 1; k++){
+            for(int t = 0; t < N - 1; t++){
+                //implement a complex number type.
+                //k is frequency
+                double imaginaryPart = Math.sin((2*PI*k*t)/N);
+                double realPart = Math.cos(2*PI*k*t);
+                ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
+                ComplexNumber newFreq = new ComplexNumber();
+                newFreq = ComplexNumber.multiply(complexNumber, channelR[t]);
 
-        return -1; // change this
+                //determine the highest frequency using the modulus of the complex number frequencies
+                //i.e. find the magnitudes of the frequencies then compare them.
+                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreqLeft)){
+                    highestFreqLeft = newFreq;
+                }
+            }
+        }
+        double highestFreq = 0.0;
+        if(ComplexNumber.mod(highestFreqLeft) >= ComplexNumber.mod(highestFreqRight)){
+            highestFreq = ComplexNumber.mod(highestFreqLeft);
+        } else if (ComplexNumber.mod(highestFreqRight) > ComplexNumber.mod(highestFreqLeft)){
+            highestFreq = ComplexNumber.mod(highestFreqRight);
+        }
+
+        return highestFreq;
     }
 
     /**
