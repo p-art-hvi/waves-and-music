@@ -222,6 +222,26 @@ public class BasicTests {
         Assert.assertArrayEquals(rchannelManualScale, rchannelScaled, 0.0001);
         Assert.assertArrayEquals(lchannelManualScale, lchannelScaled, 0.0001);
     }
+
+    @Test
+    public void testHPF() {
+        int interval = 2;
+        double timeConstant = 2;
+        double alpha = 0.5;
+
+        double freq = 70;
+        double amp = .5;
+        double phase = 2;
+        double duration = 5;
+        double [] rchannel = new double[5*44100 + 1];
+        double [] lchannel = new double[5*44100 + 1];
+
+        SoundWave wave = new SoundWave(freq, phase, amp, duration);
+        SoundWave hpfWave = wave.highPassFilter(interval, timeConstant);
+        double [] rchannelHPF = hpfWave.getRightChannel();
+        double [] lchannelHPF = hpfWave.getLeftChannel();
+
+    }
 }
 
 
