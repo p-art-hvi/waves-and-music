@@ -226,6 +226,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             }
         }
 
+
         SoundWave soundWave = new SoundWave(lNewChannel, rNewChannel);
         
         return soundWave;
@@ -242,6 +243,9 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         // TODO: create a test for this method
         ArrayList<Double> lEcho = new ArrayList<>();
         ArrayList<Double> rEcho = new ArrayList<>();
+        int j = 0;
+        int max = 1;
+        int min = -1;
 
         for (int i = 0; i < delta * SAMPLES_PER_SECOND; i++) {
             lEcho.add(lchannel.get(i));
@@ -271,12 +275,27 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] lEchoArray = new double[lEcho.size()];
         double[] rEchoArray = new double[rEcho.size()];
 
-        for (int i = 0; i < lEchoArray.length; i++) {
-            lEchoArray[i] = lEcho.get(i);
+        for (j = 0; j < lEcho.size(); j++) {
+            if (lEcho.get(j) > 1) {
+                lEchoArray[j] = max;
+            } else if (lEcho.get(j) < -1) {
+                lEchoArray[j] = min;
+            } else {
+                lEchoArray[j] = lEcho.get(j);
+            }
         }
-        for (int i = 0; i < rEchoArray.length; i++) {
-            rEchoArray[i] = rEcho.get(i);
+
+        for (j = 0; j < rEcho.size(); j++) {
+            if (rEcho.get(j) > 1) {
+                rEchoArray[j] = max;
+            } else if (rEcho.get(j) < -1) {
+                rEchoArray[j] = min;
+            } else {
+                rEchoArray[j] = rEcho.get(j);
+            }
         }
+
+
 
         SoundWave echo = new SoundWave(lEchoArray, rEchoArray);
 
@@ -332,7 +351,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return
      */
     public SoundWave highPassFilter(int dt, double RC) {
-        // TODO: Implement this
         double[] channelR = getRightChannel();
         double[] arrayR = new double[channelR.length];
         double alpha = RC / (RC + dt);
@@ -343,7 +361,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             arrayR[i] = alpha * arrayR[i-1] + alpha * (channelR[i] - channelR[i - 1]);
         }
 
-        //for the left channel...
+        //for the left channel
         double[] channelL = getLeftChannel();
         double[] arrayL = new double[channelL.length];
 
@@ -454,11 +472,11 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     /**
      * Play this wave on the standard stereo device.
      */
-    public void sendToStereoSpeaker() {
+    /*public void sendToStereoSpeaker() {
         // You may not need to change this...
         double[] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
         double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
         StdPlayer.playWave(lchannel, rchannel);
-    }
+    }*/
 
 }

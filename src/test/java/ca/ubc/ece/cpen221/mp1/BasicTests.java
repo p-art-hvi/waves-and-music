@@ -229,17 +229,27 @@ public class BasicTests {
         double timeConstant = 2;
         double alpha = 0.5;
 
-        double freq = 70;
-        double amp = .5;
-        double phase = 2;
-        double duration = 5;
-        double [] rchannel = new double[5*44100 + 1];
-        double [] lchannel = new double[5*44100 + 1];
 
-        SoundWave wave = new SoundWave(freq, phase, amp, duration);
+        double [] rchannel = {-.9, 0.1, 0.65, 1, 0, .75};
+        double [] lchannel = {0.5, 1, 0.75, -0.5, 0.9, 0.2};
+
+        SoundWave wave = new SoundWave(lchannel, rchannel);
         SoundWave hpfWave = wave.highPassFilter(interval, timeConstant);
         double [] rchannelHPF = hpfWave.getRightChannel();
         double [] lchannelHPF = hpfWave.getLeftChannel();
+
+
+        double value2 = rchannelHPF[2];
+        double calculatedValue2 = alpha * alpha * (rchannel[0]
+                + rchannel[1] - rchannel[0]) + alpha * (rchannel[2] - rchannel[1]);
+
+        double value5 = rchannelHPF[5];
+        double calculatedValue5 = alpha * (rchannel[5] - rchannel[4]) +
+                alpha * (alpha * (alpha * calculatedValue2 + alpha *
+                        (rchannel[3] - rchannel[2])) + alpha * (rchannel[4] - rchannel[3]));
+
+        Assert.assertEquals(calculatedValue2, value2, 0.0001);
+        Assert.assertEquals(calculatedValue5, value5, 0.0001);
 
     }
 }
