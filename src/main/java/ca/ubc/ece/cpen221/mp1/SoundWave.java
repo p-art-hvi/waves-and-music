@@ -2,6 +2,7 @@ package ca.ubc.ece.cpen221.mp1;
 
 import ca.ubc.ece.cpen221.mp1.utils.ComplexNumber;
 import ca.ubc.ece.cpen221.mp1.utils.HasSimilarity;
+import ca.ubc.ece.cpen221.mp1.utils.HelperMethods;
 import javazoom.jl.player.StdPlayer;
 
 import java.io.File;
@@ -37,8 +38,10 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     }
 
     public SoundWave() {
+      
         this.rchannel = new ArrayList<>();
         this.lchannel = new ArrayList<>();
+
     }
 
     /**
@@ -174,57 +177,12 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] lchannelA = getLeftChannel();
         double[] rOtherChannel = other.getRightChannel();
         double[] lOtherChannel = other.getLeftChannel();
-        int sizeRight = 0;
-        int sizeLeft = 0;
 
-        if (rchannelA.length >= rOtherChannel.length) {
-            sizeRight = rchannelA.length;
-        } else {
-            sizeRight = rOtherChannel.length;
-        }
-
-        if (lchannelA.length >= lOtherChannel.length) {
-            sizeLeft = lchannelA.length;
-        } else {
-            sizeLeft = lOtherChannel.length;
-        }
-
-        double[] rNewChannel = new double[sizeRight];
-        double[] lNewChannel = new double[sizeLeft];
-
-        for (int i = 0; i < rchannelA.length && i < rOtherChannel.length; i++) {
-            double addValue = rchannelA[i] + rOtherChannel[i];
-            rNewChannel[i] = addValue;
-        }
-
-        for (int i = 0; i < lchannelA.length && i < lOtherChannel.length; i++) {
-            double addValue = lchannelA[i] + lOtherChannel[i];
-            lNewChannel[i] = addValue;
-        }
-
-        if (lchannelA.length > lOtherChannel.length) {
-            for (int i = lOtherChannel.length; i < lchannelA.length; i++) {
-                lNewChannel[i] = lchannelA[i];
-            }
-        } else if (lchannelA.length < lOtherChannel.length) {
-            for (int i = lchannelA.length; i < lOtherChannel.length; i++) {
-                lNewChannel[i] = lOtherChannel[i];
-            }
-        }
-
-        if (rchannelA.length > rOtherChannel.length) {
-            for (int i = rOtherChannel.length; i < rchannelA.length; i++) {
-                rNewChannel[i] = rchannelA[i];
-            }
-        } else if (rchannelA.length < rOtherChannel.length) {
-            for (int i = rchannelA.length; i < rOtherChannel.length; i++) {
-                rNewChannel[i] = rOtherChannel[i];
-            }
-        }
+        double[] rNewChannel = HelperMethods.add(rchannelA, rOtherChannel);
+        double[] lNewChannel = HelperMethods.add(lchannelA,lOtherChannel);
 
 
         SoundWave soundWave = new SoundWave(lNewChannel, rNewChannel);
-        
         return soundWave;
     }
 
@@ -247,26 +205,9 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             rEcho.add(rchannel.get(i));
         }
 
-        for (int i = delta; i < lchannel.size(); i++) {
-            double echoValue = lchannel.get(i) + lchannel.get(i - delta) * alpha;
-            lEcho.add(echoValue);
-        }
 
-        for (int i = lchannel.size(); i < lchannel.size() + delta; i++) {
-            lEcho.add(lchannel.get(i - delta) * alpha);
-        }
-
-        for (int i = delta; i < rchannel.size(); i++) {
-            double echoValue = rchannel.get(i) + rchannel.get(i - delta) * alpha;
-            rEcho.add(echoValue);
-        }
-
-        for (int i = rchannel.size(); i < rchannel.size() + delta; i++) {
-            rEcho.add(rchannel.get(i - delta) * alpha);
-        }
-
-        double[] lEchoArray = new double[lEcho.size()];
-        double[] rEchoArray = new double[rEcho.size()];
+        double[] lEchoArray = HelperMethods.addEcho(delta, lEcho, SAMPLES_PER_SECOND, alpha, lchannel);
+        double[] rEchoArray = HelperMethods.addEcho(delta, rEcho, SAMPLES_PER_SECOND, alpha, rchannel);
 
         for (j = 0; j < lEcho.size(); j++) {
             if (lEcho.get(j) > 1) {
@@ -275,16 +216,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
                 lEchoArray[j] = min;
             } else {
                 lEchoArray[j] = lEcho.get(j);
-            }
-        }
-
-        for (j = 0; j < rEcho.size(); j++) {
-            if (rEcho.get(j) > 1) {
-                rEchoArray[j] = max;
-            } else if (rEcho.get(j) < -1) {
-                rEchoArray[j] = min;
-            } else {
-                rEchoArray[j] = rEcho.get(j);
             }
         }
 

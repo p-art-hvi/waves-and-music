@@ -130,7 +130,6 @@ public class BasicTests {
 
         Assert.assertArrayEquals(rchannelAdded, rchannel1, 0.00001);
         Assert.assertArrayEquals(lchannelAdded, lchannel1, 0.00001);
-
     }
 
     //test adding channels of varying lengths - added channel shorter than original channel
