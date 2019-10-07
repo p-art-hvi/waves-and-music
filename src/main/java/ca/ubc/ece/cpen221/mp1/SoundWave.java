@@ -59,7 +59,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         this.lchannel = new ArrayList<>();
 
         //TODO: check plus or minus phase
-        for (time = 0; time <= duration; time = time + 1.0 / (double) SAMPLES_PER_SECOND) {
+        for (time = 0; time <= duration; time = time + 1.0 / (double) SoundWave.SAMPLES_PER_SECOND) {
             double omega = 2 * Math.PI * freq * time;
             double yValue = amplitude * Math.sin(omega + phase);
             rchannel.add(yValue);
@@ -196,30 +196,9 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     public SoundWave addEcho(int delta, double alpha) {
         ArrayList<Double> lEcho = new ArrayList<>();
         ArrayList<Double> rEcho = new ArrayList<>();
-        int j = 0;
-        int max = 1;
-        int min = -1;
 
-        for (int i = 0; i < delta; i++) {
-            lEcho.add(lchannel.get(i));
-            rEcho.add(rchannel.get(i));
-        }
-
-
-        double[] lEchoArray = HelperMethods.addEcho(delta, lEcho, SAMPLES_PER_SECOND, alpha, lchannel);
-        double[] rEchoArray = HelperMethods.addEcho(delta, rEcho, SAMPLES_PER_SECOND, alpha, rchannel);
-
-        for (j = 0; j < lEcho.size(); j++) {
-            if (lEcho.get(j) > 1) {
-                lEchoArray[j] = max;
-            } else if (lEcho.get(j) < -1) {
-                lEchoArray[j] = min;
-            } else {
-                lEchoArray[j] = lEcho.get(j);
-            }
-        }
-
-
+        double[] lEchoArray = HelperMethods.addEcho(delta, lEcho, alpha, lchannel);
+        double[] rEchoArray = HelperMethods.addEcho(delta, rEcho, alpha, rchannel);
 
         SoundWave echo = new SoundWave(lEchoArray, rEchoArray);
 
@@ -234,35 +213,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @param scalingFactor is a value > 0.
      */
     public void scale(double scalingFactor) {
-        int max = 1;
-        int min = -1;
-        ArrayList<Double> lScaled = new ArrayList<>();
-        ArrayList<Double> rScaled = new ArrayList<>();
-
-        for (int i = 0; i < lchannel.size(); i++) {
-            double scaledVal = scalingFactor * lchannel.get(i);
-            if (scaledVal >= max) {
-                lScaled.add(1.0);
-            } else if (scaledVal <= min) {
-                lScaled.add(-1.0);
-            } else {
-                lScaled.add(scaledVal);
-            }
-        }
-
-        for (int i = 0; i < rchannel.size(); i++) {
-            double scaledVal = scalingFactor * rchannel.get(i);
-            if (scaledVal >= max) {
-                rScaled.add(1.0);
-            } else if (scaledVal <= min) {
-                rScaled.add(-1.0);
-            } else {
-                rScaled.add(scaledVal);
-            }
-        }
-
-        lchannel = lScaled;
-        rchannel = rScaled;
+        lchannel = HelperMethods.scale(lchannel, scalingFactor);
+        rchannel = HelperMethods.scale(rchannel, scalingFactor);
     }
 
     /**
@@ -274,25 +226,12 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return
      */
     public SoundWave highPassFilter(int dt, double RC) {
-        double[] channelR = getRightChannel();
-        double[] arrayR = new double[channelR.length];
+        double[] rchannel = getRightChannel();
+        double[] lchannel = getLeftChannel();
         double alpha = RC / (RC + dt);
 
-        arrayR[0] = channelR[0];
-
-        for (int i = 1; i < channelR.length; i++) {
-            arrayR[i] = alpha * arrayR[i - 1] + alpha * (channelR[i] - channelR[i - 1]);
-        }
-
-        //for the left channel
-        double[] channelL = getLeftChannel();
-        double[] arrayL = new double[channelL.length];
-
-        arrayL[0] = channelL[0];
-
-        for (int i = 1; i < channelL.length; i++) {
-            arrayL[i] = alpha * arrayL[i - 1] + alpha * (channelL[i] - channelL[i - 1]);
-        }
+        double[] arrayL = HelperMethods.helpHPF(alpha, lchannel);
+        double[] arrayR = HelperMethods.helpHPF(alpha, rchannel);
 
         SoundWave soundWave = new SoundWave(arrayL, arrayR);
         return soundWave;
@@ -323,7 +262,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         ComplexNumber temp2 = new ComplexNumber(0.0,0.0);
 
         for (int freq = 0; freq < N - 1; freq++) {
-
             for (int t = 0; t < N - 1; t++) {
                 //implement a complex number type.
                 double imaginaryPart = Math.sin((2 * PI * freq * t) / N);
@@ -356,6 +294,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
                 highestFreqLeft = temp2;
             }
         }
+
         double highestFreq = 0.0;
         if (ComplexNumber.mod(highestFreqLeft) >= ComplexNumber.mod(highestFreqRight)) {
             highestFreq = ComplexNumber.mod(highestFreqLeft);
@@ -415,7 +354,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         }
 
         return contains;
-      
+
 
     }
 
