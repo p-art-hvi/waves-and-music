@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 
 public class BasicTests {
-
+    //testing the left and right channel getters
     @Test
     public void testCreateWave() {
         double[] lchannel = {1.0, -1.0};
@@ -20,6 +20,7 @@ public class BasicTests {
         Assert.assertArrayEquals(rchannel, rchannel1, 0.00001);
     }
 
+    //testing a null wave as a default
     @Test
     public void testEmptyWave() {
         double [] lchannel = new double [0];
@@ -32,6 +33,7 @@ public class BasicTests {
         Assert.assertArrayEquals(rchannel, rchannel1, 0.00001);
     }
 
+    //testing creating SoundWave object using the wave equation
     @Test
     public void testWaveFromScratch() {
 
@@ -59,6 +61,7 @@ public class BasicTests {
         Assert.assertArrayEquals(lchannel, lchannel1, 0.00001);
     }
 
+    //testing append method using another SoundWave object
     @Test
     public void testAppend() {
 
@@ -83,6 +86,7 @@ public class BasicTests {
 
     }
 
+    //testing append method using individual left and right channels
     @Test
     public void testAppend1() {
         double[] lchannel = {1.0, 0.5, -0.5, -1.0};
@@ -104,14 +108,16 @@ public class BasicTests {
         Assert.assertArrayEquals(lchannelAppended, lchannel1, 0.00001);
     }
 
+    //test add function using multiple channels of the same length
+    //checks for capping off at max/min values (+1/-1)
     @Test
     public void testAdd() {
         double[] lchannel = {1.0, 0.5, -0.5, -1.0};
         double[] rchannel = {1.0, 0.2, -0.3, -1.0};
         double[] lchannelAdd = {.5, .1, .1, -.5};
         double[] rchannelAdd = {1.0, .1, .15, -.5};
-        double[] lchannelAdded = {1.5, 0.6, -0.4, -1.5};
-        double[] rchannelAdded = {2, .3, -.15, -1.5};
+        double[] lchannelAdded = {1.0, 0.6, -0.4, -1};
+        double[] rchannelAdded = {1, .3, -.15, -1};
 
         SoundWave wave = new SoundWave(lchannel, rchannel);
         SoundWave toAdd = new SoundWave(lchannelAdd, rchannelAdd);
@@ -127,14 +133,15 @@ public class BasicTests {
 
     }
 
+    //test adding channels of varying lengths - added channel shorter than original channel
     @Test
     public void testAdd1() {
         double[] lchannel = {1.0, 0.5, -0.5, -1.0, 1.0};
         double[] rchannel = {1.0, 0.2, -0.3, -1.0, 1.5};
         double[] lchannelAdd = {.5, .1, .1, -.5};
         double[] rchannelAdd = {1.0, .1, .15, -.5};
-        double[] lchannelAdded = {1.5, 0.6, -0.4, -1.5, 1.0};
-        double[] rchannelAdded = {2, .3, -.15, -1.5, 1.5};
+        double[] lchannelAdded = {1, 0.6, -0.4, -1, 1.0};
+        double[] rchannelAdded = {1, .3, -.15, -1, 1};
 
         SoundWave wave = new SoundWave(lchannel, rchannel);
         SoundWave toAdd = new SoundWave(lchannelAdd, rchannelAdd);
@@ -150,14 +157,15 @@ public class BasicTests {
 
     }
 
+    //test adding channels of varying lengths - added channel longer than original channel
     @Test
     public void testAdd2() {
         double[] lchannel = {1.0, 0.5, -0.5};
         double[] rchannel = {1.0, 0.2, -0.3};
         double[] lchannelAdd = {.5, .1, .1, -.5};
         double[] rchannelAdd = {1.0, .1, .15, -.5};
-        double[] lchannelAdded = {1.5, 0.6, -0.4, -0.5};
-        double[] rchannelAdded = {2, .3, -.15, -.5};
+        double[] lchannelAdded = {1, 0.6, -0.4, -0.5};
+        double[] rchannelAdded = {1, .3, -.15, -.5};
 
         SoundWave wave = new SoundWave(lchannel, rchannel);
         SoundWave toAdd = new SoundWave(lchannelAdd, rchannelAdd);
@@ -173,10 +181,11 @@ public class BasicTests {
 
     }
 
+    //testing echo function at indexes before the echo, during the echo, and after the initial SoundWave
     @Test
     public void testEcho() {
         double alpha = 0.2;
-        int delta = 2;
+        int delta = 2*44100;
 
         double freq = 70;
         double amp = .5;
@@ -204,6 +213,8 @@ public class BasicTests {
         Assert.assertEquals(valueAtSixSeconds, calculatedValueAtSixSeconds, 0.00001);
     }
 
+
+    //test scale function and ability to cap off values at min/max (-1/+1)
     @Test
     public void testScaling() {
         double [] lchannel = {1, 0.5, 0.2, -1, 0.75, -0.1};
@@ -223,12 +234,12 @@ public class BasicTests {
         Assert.assertArrayEquals(lchannelManualScale, lchannelScaled, 0.0001);
     }
 
+    //testing high pass filter at various indexes
     @Test
     public void testHPF() {
         int interval = 2;
         double timeConstant = 2;
         double alpha = 0.5;
-
 
         double [] rchannel = {-.9, 0.1, 0.65, 1, 0, .75};
         double [] lchannel = {0.5, 1, 0.75, -0.5, 0.9, 0.2};

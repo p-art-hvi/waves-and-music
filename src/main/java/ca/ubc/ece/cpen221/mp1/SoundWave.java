@@ -30,7 +30,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @param rchannel is not null and represents the right channel.
      */
     public SoundWave(double[] lchannel, double[] rchannel) {
-        // TODO: Implement this constructor
         this.rchannel = new ArrayList<>();
         this.lchannel = new ArrayList<>();
         append(lchannel, rchannel);
@@ -38,8 +37,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     }
 
     public SoundWave() {
-        // TODO: You should implement a default constructor
-        // that creates an empty wave
         this.rchannel = new ArrayList<>();
         this.lchannel = new ArrayList<>();
     }
@@ -54,7 +51,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @param duration  the duration of the sine wave, in seconds
      */
     public SoundWave(double freq, double phase, double amplitude, double duration) {
-        // TODO: Implement this constructor
         double time = 0;
         this.rchannel = new ArrayList<>();
         this.lchannel = new ArrayList<>();
@@ -137,8 +133,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         ArrayList<Double> lChannelTwoArray = new ArrayList<Double>();
 
 
-       for (int i = 0; i < rChannelTwo.length; i++) {
-          rChannelTwoArray.add(rChannelTwo[i]);
+        for (int i = 0; i < rChannelTwo.length; i++) {
+            rChannelTwoArray.add(rChannelTwo[i]);
         }
 
         for (int i = 0; i < lChannelTwo.length; i++) {
@@ -240,36 +236,33 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return a new sound wave with an echo.
      */
     public SoundWave addEcho(int delta, double alpha) {
-        // TODO: create a test for this method
         ArrayList<Double> lEcho = new ArrayList<>();
         ArrayList<Double> rEcho = new ArrayList<>();
         int j = 0;
         int max = 1;
         int min = -1;
 
-        for (int i = 0; i < delta * SAMPLES_PER_SECOND; i++) {
+        for (int i = 0; i < delta; i++) {
             lEcho.add(lchannel.get(i));
             rEcho.add(rchannel.get(i));
         }
 
-        for (int i = delta * SAMPLES_PER_SECOND; i < lchannel.size(); i++) {
-            double echoValue = lchannel.get(i)
-                    + lchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
+        for (int i = delta; i < lchannel.size(); i++) {
+            double echoValue = lchannel.get(i) + lchannel.get(i - delta) * alpha;
             lEcho.add(echoValue);
         }
 
-        for (int i = lchannel.size(); i < lchannel.size() + delta * SAMPLES_PER_SECOND; i++) {
-            lEcho.add(lchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha);
+        for (int i = lchannel.size(); i < lchannel.size() + delta; i++) {
+            lEcho.add(lchannel.get(i - delta) * alpha);
         }
 
-        for (int i = delta * SAMPLES_PER_SECOND; i < rchannel.size(); i++) {
-            double echoValue = rchannel.get(i)
-                    + rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha;
+        for (int i = delta; i < rchannel.size(); i++) {
+            double echoValue = rchannel.get(i) + rchannel.get(i - delta) * alpha;
             rEcho.add(echoValue);
         }
 
-        for (int i = rchannel.size(); i < rchannel.size() + delta * SAMPLES_PER_SECOND; i++) {
-            rEcho.add(rchannel.get(i - delta * SAMPLES_PER_SECOND) * alpha);
+        for (int i = rchannel.size(); i < rchannel.size() + delta; i++) {
+            rEcho.add(rchannel.get(i - delta) * alpha);
         }
 
         double[] lEchoArray = new double[lEcho.size()];
@@ -310,7 +303,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @param scalingFactor is a value > 0.
      */
     public void scale(double scalingFactor) {
-        // TODO: Implement this method.
         int max = 1;
         int min = -1;
         ArrayList<Double> lScaled = new ArrayList<>();
@@ -357,8 +349,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
         arrayR[0] = channelR[0];
 
-        for (int i = 1; i < channelR.length; i++){
-            arrayR[i] = alpha * arrayR[i-1] + alpha * (channelR[i] - channelR[i - 1]);
+        for (int i = 1; i < channelR.length; i++) {
+            arrayR[i] = alpha * arrayR[i - 1] + alpha * (channelR[i] - channelR[i - 1]);
         }
 
         //for the left channel
@@ -367,8 +359,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
         arrayL[0] = channelL[0];
 
-        for (int i = 1; i < channelL.length; i++){
-            arrayL[i] = alpha * arrayL[i-1] + alpha * (channelL[i] - channelL[i - 1]);
+        for (int i = 1; i < channelL.length; i++) {
+            arrayL[i] = alpha * arrayL[i - 1] + alpha * (channelL[i] - channelL[i - 1]);
         }
 
         SoundWave soundWave = new SoundWave(arrayL, arrayR);
@@ -397,46 +389,44 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         ComplexNumber highestFreqRight = new ComplexNumber(0.0, 0.0);
         ComplexNumber highestFreqLeft = new ComplexNumber(0.0, 0.0);
 
-        for(int k = 0; k < N - 1; k++){
-            for(int t = 0; t < N - 1; t++){
+        for (int freq = 0; freq < N - 1; freq++) {
+            for (int t = 0; t < N - 1; t++) {
                 //implement a complex number type.
-                //k is frequency
-                double imaginaryPart = Math.sin((2*PI*k*t)/N);
-                double realPart = Math.cos(2*PI*k*t);
+                double imaginaryPart = Math.sin((2 * PI * freq * t) / N);
+                double realPart = Math.cos(2 * PI * freq * t);
                 ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
                 ComplexNumber newFreq = new ComplexNumber();
                 newFreq = ComplexNumber.multiply(complexNumber, channelR[t]);
 
-                //determine the highest frequency using the modulus of the complex number frequencies
+                //determine highest frequency using the modulus of the complex number frequencies
                 //i.e. find the magnitudes of the frequencies then compare them.
-                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreqRight)){
+                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreqRight)) {
                     highestFreqRight = newFreq;
                 }
             }
         }
 
         //get the frequencies as an array for lchannel...
-        for(int k = 0; k < N - 1; k++){
-            for(int t = 0; t < N - 1; t++){
+        for (int freq = 0; freq < N - 1; freq++) {
+            for (int t = 0; t < N - 1; t++) {
                 //implement a complex number type.
-                //k is frequency
-                double imaginaryPart = Math.sin((2*PI*k*t)/N);
-                double realPart = Math.cos(2*PI*k*t);
+                double imaginaryPart = Math.sin((2 * PI * freq * t) / N);
+                double realPart = Math.cos(2 * PI * freq * t);
                 ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
                 ComplexNumber newFreq = new ComplexNumber();
                 newFreq = ComplexNumber.multiply(complexNumber, channelR[t]);
 
-                //determine the highest frequency using the modulus of the complex number frequencies
-                //i.e. find the magnitudes of the frequencies then compare them.
-                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreqLeft)){
+                //determine highest frequency using the modulus of the complex number frequencies
+                //i.e. find magnitudes of the frequencies then compare them.
+                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreqLeft)) {
                     highestFreqLeft = newFreq;
                 }
             }
         }
         double highestFreq = 0.0;
-        if(ComplexNumber.mod(highestFreqLeft) >= ComplexNumber.mod(highestFreqRight)){
+        if (ComplexNumber.mod(highestFreqLeft) >= ComplexNumber.mod(highestFreqRight)) {
             highestFreq = ComplexNumber.mod(highestFreqLeft);
-        } else if (ComplexNumber.mod(highestFreqRight) > ComplexNumber.mod(highestFreqLeft)){
+        } else if (ComplexNumber.mod(highestFreqRight) > ComplexNumber.mod(highestFreqLeft)) {
             highestFreq = ComplexNumber.mod(highestFreqRight);
         }
 
