@@ -236,9 +236,9 @@ public class BasicTests {
     //testing high pass filter at various indexes
     @Test
     public void testHPF() {
-        int interval = 2;
-        double timeConstant = 2;
-        double alpha = 0.5;
+        int interval = 2*44100;
+        double timeConstant = 2*44100;
+        double alpha = timeConstant/(timeConstant + interval);
 
         double [] rchannel = {-.9, 0.1, 0.65, 1, 0, .75};
         double [] lchannel = {0.5, 1, 0.75, -0.5, 0.9, 0.2};
