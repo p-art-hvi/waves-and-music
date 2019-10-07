@@ -46,4 +46,15 @@ public class ComplexNumber {
         double mod = Math.sqrt((z.real * z.real) + (z.imaginary * z.imaginary));
         return mod;
     }
+    public double realComp(){
+        return this.real;
+    }
+    public double imaginaryComp(){
+        return this.imaginary;
+    }
+
+    public void add(ComplexNumber z){
+        real = this.real + z.realComp();
+        imaginary = this.imaginary + z.imaginaryComp();
+    }
 }
