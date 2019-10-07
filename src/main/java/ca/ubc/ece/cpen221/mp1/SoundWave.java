@@ -356,7 +356,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
                 highestFreqLeft = temp2;
             }
         }
-        
         double highestFreq = 0.0;
         if (ComplexNumber.mod(highestFreqLeft) >= ComplexNumber.mod(highestFreqRight)) {
             highestFreq = ComplexNumber.mod(highestFreqLeft);
