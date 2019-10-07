@@ -374,7 +374,47 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public boolean contains(SoundWave other) {
         // TODO: Implement this method
-        return false; // change this
+
+        boolean contains = false;
+        SoundWave soundWave = new SoundWave();
+        double[] rightChannel = soundWave.getRightChannel();
+        double[] leftChannel = soundWave.getLeftChannel();
+        double[] checkChannelR = other.getRightChannel();
+        double[] checkChannelL = other.getLeftChannel();
+
+        //check if the right channel of other is within the right channel of soundWave
+        for(int b = 0; b < rightChannel.length * SAMPLES_PER_SECOND; b++){
+            for(int a = 0; a < checkChannelR.length * SAMPLES_PER_SECOND; a++){
+                if((checkChannelR[a]/rightChannel[b]) == (checkChannelR[a + 1]/rightChannel[b + 1])){
+                    for(int i = a; i < checkChannelR.length* SAMPLES_PER_SECOND; i++){
+                        if((checkChannelR[i]/rightChannel[b]) == (checkChannelR[i + 1]/rightChannel[b + 1])){
+                            contains = true;
+                        } else {
+                            contains = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        //check if the left channel of other is within the left channel of soundWave
+        for(int b = 0; b < leftChannel.length * SAMPLES_PER_SECOND; b++){
+            for(int a = 0; a < checkChannelL.length * SAMPLES_PER_SECOND; a++){
+                if((checkChannelL[a]/rightChannel[b]) == (checkChannelL[a + 1]/leftChannel[b + 1])){
+                    for(int i = a; i < checkChannelL.length* SAMPLES_PER_SECOND; i++){
+                        if((checkChannelL[i]/leftChannel[b]) == (checkChannelL[i + 1]/leftChannel[b + 1])){
+                            contains = true;
+                        } else {
+                            contains = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return contains;
+      
+
     }
 
     /**
