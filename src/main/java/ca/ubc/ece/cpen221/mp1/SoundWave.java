@@ -319,8 +319,11 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         int N = rchannel.size();
         ComplexNumber highestFreqRight = new ComplexNumber(0.0, 0.0);
         ComplexNumber highestFreqLeft = new ComplexNumber(0.0, 0.0);
+        ComplexNumber temp1 = new ComplexNumber(0.0,0.0);
+        ComplexNumber temp2 = new ComplexNumber(0.0,0.0);
 
         for (int freq = 0; freq < N - 1; freq++) {
+
             for (int t = 0; t < N - 1; t++) {
                 //implement a complex number type.
                 double imaginaryPart = Math.sin((2 * PI * freq * t) / N);
@@ -328,12 +331,10 @@ public class SoundWave implements HasSimilarity<SoundWave> {
                 ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
                 ComplexNumber newFreq = new ComplexNumber();
                 newFreq = ComplexNumber.multiply(complexNumber, channelR[t]);
-
-                //determine highest frequency using the modulus of the complex number frequencies
-                //i.e. find the magnitudes of the frequencies then compare them.
-                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreqRight)) {
-                    highestFreqRight = newFreq;
-                }
+                temp1.add(newFreq);
+            }
+            if (ComplexNumber.mod(temp1) >= ComplexNumber.mod(highestFreqRight)){
+                highestFreqRight = temp1;
             }
         }
 
@@ -346,14 +347,16 @@ public class SoundWave implements HasSimilarity<SoundWave> {
                 ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
                 ComplexNumber newFreq = new ComplexNumber();
                 newFreq = ComplexNumber.multiply(complexNumber, channelR[t]);
+                temp2.add(newFreq);
+            }
+            //determine highest frequency using the modulus of the complex number frequencies
+            //i.e. find magnitudes of the frequencies then compare them.
 
-                //determine highest frequency using the modulus of the complex number frequencies
-                //i.e. find magnitudes of the frequencies then compare them.
-                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreqLeft)) {
-                    highestFreqLeft = newFreq;
-                }
+            if (ComplexNumber.mod(temp2) >= ComplexNumber.mod(highestFreqLeft)) {
+                highestFreqLeft = temp2;
             }
         }
+        
         double highestFreq = 0.0;
         if (ComplexNumber.mod(highestFreqLeft) >= ComplexNumber.mod(highestFreqRight)) {
             highestFreq = ComplexNumber.mod(highestFreqLeft);
