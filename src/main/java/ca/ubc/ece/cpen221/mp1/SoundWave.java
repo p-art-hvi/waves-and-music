@@ -36,6 +36,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
     }
 
+    //creates an empty SoundWave
     public SoundWave() {
       
         this.rchannel = new ArrayList<>();
@@ -142,30 +143,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         }
         return newRchannel;
     }
-
-    /**
-     * A simple main method to play an MP3 file. Note that MP3 files should
-     * be encoded to use stereo channels and not mono channels for the sound to
-     * play out correctly.
-     * <p>
-     * One should try to get this method to work correctly at the start.
-     * </p>
-     *
-     * @param args are currently ignored but you could be creative.
-     */
-  /*  public static void main(String[] args) {
-        File file = new File("mp3/anger.mp3");
-        StdPlayer.open("mp3/anger.mp3");
-        SoundWave sw = new SoundWave();
-        while (!StdPlayer.isEmpty()) {
-            double[] lchannel = StdPlayer.getLeftChannel();
-            double[] rchannel = StdPlayer.getRightChannel();
-            sw.append(lchannel, rchannel);
-        }
-
-        sw.sendToStereoSpeaker();
-        StdPlayer.close();
-    }*/
 
     /**
      * Append a wave to this wave.
@@ -370,8 +347,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
                     contains = false;
                     break;
                 }
-
-
             }
         }
         return contains;
@@ -462,15 +437,4 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double similarity = (similarity1 + similarity2)/2;
         return similarity;
     }
-
-    /**
-     * Play this wave on the standard stereo device.
-     */
-    /*public void sendToStereoSpeaker() {
-        // You may not need to change this...
-        double[] lchannel = this.lchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        double[] rchannel = this.rchannel.stream().mapToDouble(x -> x.doubleValue()).toArray();
-        StdPlayer.playWave(lchannel, rchannel);
-    }*/
-
 }
