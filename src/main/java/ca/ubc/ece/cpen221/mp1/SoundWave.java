@@ -14,7 +14,6 @@ import java.lang.Math;
 
 public class SoundWave implements HasSimilarity<SoundWave> {
 
-    public static final double PI = 3.14156;
     public static final int SAMPLES_PER_SECOND = 44100;
 
     // some representation fields that you could use
@@ -247,55 +246,14 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * return the higher frequency.
      */
     public double highAmplitudeFreqComponent() {
-        // TODO: Implement this method
-        //implement the DFT algorithm...
-        //get the frequencies as an array for rchannel...
-        double[] channelR;
-        channelR = getRightChannel();
-
-        double[] frequencyR = new double[rchannel.size()];
 
         int N = rchannel.size();
         ComplexNumber highestFreqRight = new ComplexNumber(0.0, 0.0);
         ComplexNumber highestFreqLeft = new ComplexNumber(0.0, 0.0);
-        ComplexNumber temp1 = new ComplexNumber(0.0,0.0);
-        ComplexNumber temp2 = new ComplexNumber(0.0,0.0);
+        ComplexNumber temp = new ComplexNumber(0.0,0.0);
 
-        for (int freq = 0; freq < N - 1; freq++) {
-            for (int t = 0; t < N - 1; t++) {
-                //implement a complex number type.
-                double imaginaryPart = Math.sin((2 * PI * freq * t) / N);
-                double realPart = Math.cos(2 * PI * freq * t);
-                ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
-                ComplexNumber newFreq = new ComplexNumber();
-                newFreq = ComplexNumber.multiply(complexNumber, channelR[t]);
-
-                //determine highest frequency using the modulus of the complex number frequencies
-                //i.e. find the magnitudes of the frequencies then compare them.
-                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreqRight)) {
-                    highestFreqRight = newFreq;
-                }
-            }
-        }
-
-        //get the frequencies as an array for lchannel...
-        for (int freq = 0; freq < N - 1; freq++) {
-            for (int t = 0; t < N - 1; t++) {
-                //implement a complex number type.
-                double imaginaryPart = Math.sin((2 * PI * freq * t) / N);
-                double realPart = Math.cos(2 * PI * freq * t);
-                ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
-                ComplexNumber newFreq = new ComplexNumber();
-                newFreq = ComplexNumber.multiply(complexNumber, channelR[t]);
-                temp2.add(newFreq);
-            }
-            //determine highest frequency using the modulus of the complex number frequencies
-            //i.e. find magnitudes of the frequencies then compare them.
-
-            if (ComplexNumber.mod(temp2) >= ComplexNumber.mod(highestFreqLeft)) {
-                highestFreqLeft = temp2;
-            }
-        }
+        highestFreqRight = HelperMethods.helpDFT(N, getRightChannel(), highestFreqRight, temp);
+        highestFreqLeft = HelperMethods.helpDFT(N, getLeftChannel(), highestFreqLeft, temp);
 
         double highestFreq = 0.0;
         if (ComplexNumber.mod(highestFreqLeft) >= ComplexNumber.mod(highestFreqRight)) {
@@ -316,49 +274,45 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * possible amplitude scaling.
      */
     public boolean contains(SoundWave other) {
-        // TODO: Implement this method
 
-        boolean contains = false;
-        SoundWave soundWave = new SoundWave();
-        double[] rightChannel = soundWave.getRightChannel();
-        double[] leftChannel = soundWave.getLeftChannel();
+        double[] rchannel = getRightChannel();
+        double[] lchannel = getLeftChannel();
         double[] checkChannelR = other.getRightChannel();
         double[] checkChannelL = other.getLeftChannel();
+        int length = 0;
+        int otherLength = 0;
 
-        //check if the right channel of other is within the right channel of soundWave
-        for(int b = 0; b < rightChannel.length * SAMPLES_PER_SECOND; b++){
-            for(int a = 0; a < checkChannelR.length * SAMPLES_PER_SECOND; a++){
-                if((checkChannelR[a]/rightChannel[b]) == (checkChannelR[a + 1]/rightChannel[b + 1])){
-                    for(int i = a; i < checkChannelR.length* SAMPLES_PER_SECOND; i++){
-                        if((checkChannelR[i]/rightChannel[b]) == (checkChannelR[i + 1]/rightChannel[b + 1])){
-                            contains = true;
-                        } else {
-                            contains = false;
-                        }
-                    }
-                }
-            }
+        boolean contains = false;
+
+        if (rchannel.length > lchannel.length) {
+            length = lchannel.length;
+        } else {
+            length = rchannel.length;
         }
 
-        //check if the left channel of other is within the left channel of soundWave
-        for(int b = 0; b < leftChannel.length * SAMPLES_PER_SECOND; b++){
-            for(int a = 0; a < checkChannelL.length * SAMPLES_PER_SECOND; a++){
-                if((checkChannelL[a]/rightChannel[b]) == (checkChannelL[a + 1]/leftChannel[b + 1])){
-                    for(int i = a; i < checkChannelL.length* SAMPLES_PER_SECOND; i++){
-                        if((checkChannelL[i]/leftChannel[b]) == (checkChannelL[i + 1]/leftChannel[b + 1])){
-                            contains = true;
-                        } else {
-                            contains = false;
-                        }
-                    }
-                }
-            }
+        if (checkChannelR.length > checkChannelL.length) {
+            otherLength = checkChannelL.length;
+        } else {
+            otherLength = checkChannelR.length;
         }
 
+        for(int b = 0; b <= length - otherLength; b++) {
+            for(int a = 0; a < otherLength; a++) {
+                if((checkChannelL[a]/lchannel[b]) == (checkChannelL[a + 1]/lchannel[b + 1])) {
+                    if ((checkChannelR[a] / rchannel[b + a]) == (checkChannelR[a + 1] / rchannel[b + a + 1])) {
+                        contains = true;
+                    } else {
+                        contains = false;
+                    }
+                } else {
+                    contains = false;
+                }
+
+
+            }
+        }
         return contains;
-
-
-    }
+        }
 
     /**
      * Determine the similarity between this wave and another wave.

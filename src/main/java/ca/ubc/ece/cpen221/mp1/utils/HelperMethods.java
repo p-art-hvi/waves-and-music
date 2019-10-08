@@ -77,21 +77,23 @@ public class HelperMethods {
         return echoArray;
     }
 
-    public static ComplexNumber helpDFT (int channelSize, double [] channel, ComplexNumber highestFreq) {
+    public static ComplexNumber helpDFT (int channelSize, double [] channel, ComplexNumber highestFreq, ComplexNumber temp) {
+
         for (int freq = 0; freq < channelSize - 1; freq++) {
             for (int t = 0; t < channelSize - 1; t++) {
                 //implement a complex number type.
                 double imaginaryPart = Math.sin((2 * Math.PI * freq * t) / channelSize);
                 double realPart = Math.cos(2 * Math.PI * freq * t);
                 ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
-                ComplexNumber newFreq = new ComplexNumber();
-                newFreq = ComplexNumber.multiply(complexNumber, channel[t]);
+                ComplexNumber newFreq = ComplexNumber.multiply(complexNumber, channel[t]);
+                temp.add(newFreq);
+            }
 
-                //determine highest frequency using the modulus of the complex number frequencies
-                //i.e. find the magnitudes of the frequencies then compare them.
-                if (ComplexNumber.mod(newFreq) >= ComplexNumber.mod(highestFreq)) {
-                    highestFreq = newFreq;
-                }
+            //determine highest frequency using the modulus of the complex number frequencies
+            //i.e. find magnitudes of the frequencies then compare them.
+
+            if (ComplexNumber.mod(temp) >= ComplexNumber.mod(highestFreq)) {
+                highestFreq = temp;
             }
         }
         return highestFreq;
@@ -124,5 +126,24 @@ public class HelperMethods {
         }
         return scaled;
     }
+
+  /*  public static boolean helpContains (double[] channel, double [] otherChannel) {
+
+        boolean contain = false;
+        for(int b = 0; b < channel.length * SoundWave.SAMPLES_PER_SECOND; b++){
+            for(int a = 0; a < otherChannel.length * SoundWave.SAMPLES_PER_SECOND; a++){
+                if((otherChannel[a]/channel[b]) == (otherChannel[a + 1]/channel[b + 1])){
+                    for(int i = a; i < otherChannel.length* SoundWave.SAMPLES_PER_SECOND; i++){
+                        if((otherChannel[i]/channel[b]) == (otherChannel[i + 1]/channel[b + 1])){
+                            contain = true;
+                        } else {
+                            contain = false;
+                        }
+                    }
+                }
+            }
+        }
+        return contain;
+    }*/
 
 }
