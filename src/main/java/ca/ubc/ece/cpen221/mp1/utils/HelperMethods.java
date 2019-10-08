@@ -82,8 +82,8 @@ public class HelperMethods {
         for (int freq = 0; freq < channelSize - 1; freq++) {
             for (int t = 0; t < channelSize - 1; t++) {
                 //implement a complex number type.
-                double imaginaryPart = Math.sin((2 * Math.PI * freq * t) / channelSize);
-                double realPart = Math.cos(2 * Math.PI * freq * t);
+                double imaginaryPart = -(Math.sin((2 * Math.PI * freq * t) / channelSize));
+                double realPart = ((Math.cos(2 * Math.PI * freq * t))/ channelSize);
                 ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
                 ComplexNumber newFreq = ComplexNumber.multiply(complexNumber, channel[t]);
                 temp.add(newFreq);

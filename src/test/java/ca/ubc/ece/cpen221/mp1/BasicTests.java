@@ -271,7 +271,7 @@ public class BasicTests {
 
         SoundWave wave = new SoundWave(lchannel, rchannel);
         double DFT = wave.highAmplitudeFreqComponent();
-        double ans = 0.0;
+        double ans = 1.0;//0.0;
 
         Assert.assertEquals(ans, DFT, 0.0001);
     }

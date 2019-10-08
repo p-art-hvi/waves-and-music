@@ -292,13 +292,15 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      */
     public double highAmplitudeFreqComponent() {
 
+        checksLength();
         int N = rchannel.size();
         ComplexNumber highestFreqRight = new ComplexNumber(0.0, 0.0);
         ComplexNumber highestFreqLeft = new ComplexNumber(0.0, 0.0);
-        ComplexNumber temp = new ComplexNumber(0.0,0.0);
+        ComplexNumber temp1 = new ComplexNumber(0.0,0.0);
+        ComplexNumber temp2 = new ComplexNumber(0.0, 0.0);
 
-        highestFreqRight = HelperMethods.helpDFT(N, getRightChannel(), highestFreqRight, temp);
-        highestFreqLeft = HelperMethods.helpDFT(N, getLeftChannel(), highestFreqLeft, temp);
+        highestFreqRight = HelperMethods.helpDFT(N, getRightChannel(), highestFreqRight, temp1);
+        highestFreqLeft = HelperMethods.helpDFT(N, getLeftChannel(), highestFreqLeft, temp2);
 
         double highestFreq = 0.0;
         if (ComplexNumber.mod(highestFreqLeft) >= ComplexNumber.mod(highestFreqRight)) {
