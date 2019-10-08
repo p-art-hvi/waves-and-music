@@ -268,6 +268,45 @@ public class BasicTests {
 
     }
 
+    //testing echo with only rchannel affected
+    @Test
+    public void testrchannelEcho() {
+        double [] lchannel = {1, 0.5, 0.2};
+        double [] rchannel = {0.6, -0.7, 0.95, 1, 0.5, 0.35};
+        double [] lchannelManualEcho = {1, 0.5, 0.2};
+        double [] rchannelManualEcho = {0.6, -0.7, 0.95, 1, 0.8, 0, 0.475, 0.5, 0.25, 0.175};
+        double alpha = 0.5;
+        int delta = 4;
+
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+        SoundWave echoedWave = wave.addEcho(delta, alpha);
+        double [] lchannelEchoed = echoedWave.getLeftChannel();
+        double [] rchannelEchoed = echoedWave.getRightChannel();
+
+        Assert.assertArrayEquals(lchannelEchoed, lchannelManualEcho, 0.0001);
+        Assert.assertArrayEquals(rchannelEchoed, rchannelManualEcho, 0.0001);
+    }
+
+    //testing echo with only lchannel affected
+    @Test
+    public void testlchannelEcho() {
+        double [] rchannel = {1, 0.5, 0.2};
+        double [] lchannel = {0.6, -0.7, 0.95, 1, 0.5, 0.35};
+        double [] rchannelManualEcho = {1, 0.5, 0.2};
+        double [] lchannelManualEcho = {0.6, -0.7, 0.95, 1, 0.8, 0, 0.475, 0.5, 0.25, 0.175};
+        double alpha = 0.5;
+        int delta = 4;
+
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+        SoundWave echoedWave = wave.addEcho(delta, alpha);
+        double [] lchannelEchoed = echoedWave.getLeftChannel();
+        double [] rchannelEchoed = echoedWave.getRightChannel();
+
+        Assert.assertArrayEquals(lchannelEchoed, lchannelManualEcho, 0.0001);
+        Assert.assertArrayEquals(rchannelEchoed, rchannelManualEcho, 0.0001);
+
+    }
+
 
     //test scale function and ability to cap off values at min/max (-1/+1)
     @Test
@@ -319,6 +358,21 @@ public class BasicTests {
 
     }
 
+    //tests cutoff frequency feature of HPF
+    @Test
+    public void testHPF2() {
+        SoundWave wave1 = new SoundWave(200, 0, 0, 1);
+        SoundWave wave2 = new SoundWave(100, 0, 0, 1);
+        wave1.checksLength();
+        wave2.checksLength();
+        wave1.checksWavesLength(wave2);
+        double cutoff = 123;
+        SoundWave wave3 = wave1.add(wave2);
+        SoundWave wave4 = wave3.highPassFilter(1, SoundWave.SAMPLES_PER_SECOND/(2 * Math.PI * cutoff));
+
+        Assert.assertArrayEquals(wave1.getLeftChannel(), wave4.getLeftChannel(), 0.0001);
+    }
+
     //tests basic DFT function
     @Test
     public void testDFT() {
@@ -355,6 +409,19 @@ public class BasicTests {
         SoundWave wave3 = wave1.add(wave2);
         double DFT = wave3.highAmplitudeFreqComponent();
         double ans = 501;
+
+        Assert.assertEquals(ans, DFT, 1);
+    }
+
+    //check DFT with TA's inputs
+    @Test
+    public void testDFT1() {
+        SoundWave wave1 = new SoundWave(201, 0, 0.6, 0.5);
+        SoundWave wave2 = new SoundWave(1552, 0, 0.4, 0.5);
+        wave1.append(wave2);
+
+        double DFT = wave1.highAmplitudeFreqComponent();
+        double ans = 200;
 
         Assert.assertEquals(ans, DFT, 1);
     }
@@ -421,6 +488,22 @@ public class BasicTests {
         boolean ans = wave.contains(contained);
 
         Assert.assertEquals(ans, false);
+    }
+
+    //test contains with different channel lengths
+    @Test
+    public void testContainsDifferentChannelLengths() {
+        double[] rchannel = {1, 1, 0.5, 0.5, 1, 1, 0.5, 1, 2, 3};
+        double[] lchannel = {0.75, 0.75, 0.5, 0.25, 1, -1, 1, 1};
+        double[] rcontained = {1, 0.5, 0.5};
+        double[] lcontained = {0.75, 0.5, 0.25};
+
+        SoundWave contained = new SoundWave(lcontained, rcontained);
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+
+        boolean ans = wave.contains(contained);
+
+        Assert.assertEquals(ans, true);
     }
 
     //test similarity for an empty wave
