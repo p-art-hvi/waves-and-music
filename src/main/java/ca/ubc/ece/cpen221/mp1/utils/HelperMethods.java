@@ -76,13 +76,13 @@ public class HelperMethods {
         return echoArray;
     }
 
-    public static ComplexNumber helpDFT (int channelSize, double [] channel, ComplexNumber highestFreq, ComplexNumber temp) {
+    public static int helpDFT (int channelSize, double [] channel, int highestFreq, ComplexNumber highestFreqAmplitude, ComplexNumber temp) {
 
         for (int freq = 0; freq < channelSize - 1; freq++) {
             for (int t = 0; t < channelSize - 1; t++) {
                 //implement a complex number type.
                 double imaginaryPart = (-1)*(Math.sin((2 * Math.PI * freq * t) / channelSize));
-                double realPart = ((Math.cos(2 * Math.PI * freq * t))/ channelSize);
+                double realPart = Math.cos((2 * Math.PI * freq * t)/ channelSize);
                 ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
                 ComplexNumber newFreq = ComplexNumber.multiply(complexNumber, channel[t]);
                 temp.add(newFreq);
@@ -91,8 +91,8 @@ public class HelperMethods {
             //determine highest frequency using the modulus of the complex number frequencies
             //i.e. find magnitudes of the frequencies then compare them.
 
-            if (ComplexNumber.mod(temp) >= ComplexNumber.mod(highestFreq)) {
-                highestFreq = temp;
+            if (ComplexNumber.mod(temp) >= ComplexNumber.mod(highestFreqAmplitude)) {
+                highestFreq = freq;
             }
         }
         return highestFreq;

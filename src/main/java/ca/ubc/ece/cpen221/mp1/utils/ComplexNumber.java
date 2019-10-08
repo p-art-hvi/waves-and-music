@@ -54,7 +54,7 @@ public class ComplexNumber {
     }
 
     public void add(ComplexNumber z){
-        real = this.real + z.realComp();
-        imaginary = this.imaginary + z.imaginaryComp();
+        real = this.real + z.real;//z.realComp();
+        imaginary = this.imaginary + z.imaginary;//z.imaginaryComp();
     }
 }

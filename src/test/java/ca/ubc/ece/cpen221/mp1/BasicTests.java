@@ -322,14 +322,14 @@ public class BasicTests {
     //tests basic DFT function
     @Test
     public void testDFT() {
-        double [] rchannel = {1, 1};
-        double [] lchannel = {1, 1};
+        //double [] rchannel = {1, 1};
+        //double [] lchannel = {1, 1};
 
-        SoundWave wave = new SoundWave(lchannel, rchannel);
+        SoundWave wave = new SoundWave(500.0, 0.0, 0.3, 0.03);
         double DFT = wave.highAmplitudeFreqComponent();
-        double ans = 0.0;
+        double ans = 500;
 
-        Assert.assertEquals(ans, DFT, 0.0001);
+        Assert.assertEquals(ans, DFT, 44100.0/(44100.0*0.03));
     }
 
     /**

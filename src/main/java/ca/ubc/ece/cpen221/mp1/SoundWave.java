@@ -305,21 +305,25 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
         checksLength();
         int N = rchannel.size();
-        ComplexNumber highestFreqRight = new ComplexNumber(0.0, 0.0);
-        ComplexNumber highestFreqLeft = new ComplexNumber(0.0, 0.0);
+        int highestFreqRight = 0;
+        ComplexNumber highestFreqAmpR = new ComplexNumber(0.0, 0.0);
+        int highestFreqLeft = 0;
+        ComplexNumber highestFreqAmpL = new ComplexNumber(0.0, 0.0);
         ComplexNumber temp1 = new ComplexNumber(0.0,0.0);
         ComplexNumber temp2 = new ComplexNumber(0.0, 0.0);
 
-        highestFreqRight = HelperMethods.helpDFT(N, getRightChannel(), highestFreqRight, temp1);
-        highestFreqLeft = HelperMethods.helpDFT(N, getLeftChannel(), highestFreqLeft, temp2);
+
+        highestFreqRight = HelperMethods.helpDFT(N, getRightChannel(), highestFreqRight, highestFreqAmpR, temp1);
+        highestFreqLeft = HelperMethods.helpDFT(N, getLeftChannel(), highestFreqLeft, highestFreqAmpL, temp2);
 
         double highestFreq = 0.0;
-        if (ComplexNumber.mod(highestFreqLeft) >= ComplexNumber.mod(highestFreqRight)) {
-            highestFreq = ComplexNumber.mod(highestFreqLeft);
-        } else if (ComplexNumber.mod(highestFreqRight) > ComplexNumber.mod(highestFreqLeft)) {
-            highestFreq = ComplexNumber.mod(highestFreqRight);
+        if (highestFreqLeft >= highestFreqRight) {
+            highestFreq = highestFreqLeft;
+        } else if (highestFreqRight > highestFreqLeft) {
+            highestFreq = highestFreqRight;
         }
 
+        //highestFreq = highestFreq * (SAMPLES_PER_SECOND/N);
         return highestFreq;
     }
 
