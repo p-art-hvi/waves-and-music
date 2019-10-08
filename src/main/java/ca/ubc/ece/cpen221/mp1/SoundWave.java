@@ -297,15 +297,20 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         }
 
         for(int b = 0; b <= length - otherLength; b++) {
-            for(int a = 0; a < otherLength; a++) {
-                if((checkChannelL[a]/lchannel[b]) == (checkChannelL[a + 1]/lchannel[b + 1])) {
+            for(int a = 0; a < otherLength - 1; a++) {
+                if((checkChannelL[a]/lchannel[b + a]) == (checkChannelL[a + 1]/lchannel[b + a + 1])) {
                     if ((checkChannelR[a] / rchannel[b + a]) == (checkChannelR[a + 1] / rchannel[b + a + 1])) {
                         contains = true;
+                        if (a == otherLength - 2) {
+                            return contains;
+                        }
                     } else {
                         contains = false;
+                        break;
                     }
                 } else {
                     contains = false;
+                    break;
                 }
 
 

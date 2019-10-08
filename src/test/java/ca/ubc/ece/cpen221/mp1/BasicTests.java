@@ -263,7 +263,47 @@ public class BasicTests {
 
     }
 
-    
+    //tests basic DFT function
+    @Test
+    public void testDFT() {
+        double [] rchannel = {1, 1};
+        double [] lchannel = {1, 1};
+
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+        double DFT = wave.highAmplitudeFreqComponent();
+        double ans = 0.0;
+
+        Assert.assertEquals(ans, DFT, 0.0001);
+    }
+
+    //checks DFT for real sinusoidal waves
+    @Test
+    public void testDFTRealWave() {
+        SoundWave wave1 = new SoundWave(501, 0, 1, 1);
+        SoundWave wave2 = new SoundWave(400, 0, 0.5, 1);
+
+        SoundWave wave3 = wave1.add(wave2);
+        double DFT = wave3.highAmplitudeFreqComponent();
+        double ans = 501;
+
+        Assert.assertEquals(ans, DFT, 1);
+    }
+
+    //check contains for no scaling factor
+    @Test
+    public void testContains() {
+        double[] rchannel = {1, 1, 0.5, 0.5, 1, 1, 0.5, -1};
+        double[] lchannel = {0.75, 0.75, 0.5, 0.25, 1, -1, 1, 1};
+        double[] rcontained = {0.5, 0.5, 1};
+        double[] lcontained = {0.5, 0.25, 1};
+
+        SoundWave contained = new SoundWave(lcontained, rcontained);
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+
+        boolean ans = wave.contains(contained);
+
+        Assert.assertEquals(ans, true);
+    }
 }
 
 
