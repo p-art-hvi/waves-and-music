@@ -364,18 +364,20 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         checksLength();
         other.checksLength();
 
+        checksWavesLength(other);
+
         double[] wave1Right = getRightChannel();
         double[] wave1Left = getLeftChannel();
         double[] wave2Right = other.getRightChannel();
         double[] wave2Left = other.getLeftChannel();
 
-        if (wave1Left.length == 0 && wave1Right.length == 0) {
+        if ((wave1Right.length == 0 && wave2Right.length == 0) && (wave1Left.length == 0 && wave2Left.length == 0)){
+            return 1;
+        } else if (wave1Left.length == 0 && wave1Right.length == 0) {
             return 0;
         } else if (wave2Left.length == 0 && wave2Right.length == 0) {
             return 0;
         }
-
-        checksWavesLength(other);
 
         //find a1:
         double a1 = 0;
@@ -400,7 +402,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double c1 = 0;
         double tempC;
         for (int t = 0; t < wave1Right.length; t++){
-            tempC = (wave1Right[t] * wave1Right[t]) + (wave1Left[t] + wave1Left[t]);
+            tempC = (wave1Right[t] * wave1Right[t]) + (wave1Left[t] * wave1Left[t]);
             c1 = c1 + tempC;
         }
 
