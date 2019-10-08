@@ -44,6 +44,52 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
     }
 
+    public void checksLength(){
+        int size = rchannel.size();
+        if(lchannel.size() > size){
+            size = lchannel.size();
+        }
+        for (int i = 0; i < size; i++){
+            if(i >= lchannel.size()){
+                this.lchannel.add(0.0);
+            }
+            if(i >= rchannel.size()){
+                this.rchannel.add(0.0);
+            }
+        }
+    }
+
+    public void checksWavesLength(SoundWave s){
+        checksLength();
+        s.checksLength();
+        int sizeR = rchannel.size();
+        if (s.rchannel.size() > sizeR){
+            sizeR = s.rchannel.size();
+        }
+        for (int i = 0; i < sizeR; i++){
+            if(i >= rchannel.size()){
+                rchannel.add(0.0);
+            }
+            if(i >= s.rchannel.size()){
+                s.rchannel.add(0.0);
+            }
+        }
+
+        int sizeL = lchannel.size();
+        if (s.lchannel.size() > sizeL){
+            sizeL = s.lchannel.size();
+        }
+        for (int i = 0; i < sizeL; i++){
+            if(i >= lchannel.size()){
+                lchannel.add(0.0);
+            }
+            if(i >= s.lchannel.size()){
+                s.lchannel.add(0.0);
+            }
+        }
+
+
+    }
     /**
      * Create a new sinusoidal sine wave,
      * sampled at a rate of 44,100 samples per second
@@ -58,7 +104,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         this.rchannel = new ArrayList<>();
         this.lchannel = new ArrayList<>();
 
-        //TODO: check plus or minus phase
         for (time = 0; time <= duration; time = time + 1.0 / (double) SoundWave.SAMPLES_PER_SECOND) {
             double omega = 2 * Math.PI * freq * time;
             double yValue = amplitude * Math.sin(omega + phase);
@@ -247,9 +292,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * return the higher frequency.
      */
     public double highAmplitudeFreqComponent() {
-        // TODO: Implement this method
-        //implement the DFT algorithm...
-        //get the frequencies as an array for rchannel...
         double[] channelR;
         channelR = getRightChannel();
 
@@ -314,7 +356,6 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * possible amplitude scaling.
      */
     public boolean contains(SoundWave other) {
-        // TODO: Implement this method
 
         boolean contains = false;
         SoundWave soundWave = new SoundWave();
@@ -367,8 +408,75 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      * @return the similarity between this wave and other.
      */
     public double similarity(SoundWave other) {
-        // TODO: Implement this method
-        return -1;
+        checksLength();
+        other.checksLength();
+
+        double[] wave1Right = getRightChannel();
+        double[] wave1Left = getLeftChannel();
+        double[] wave2Right = other.getRightChannel();
+        double[] wave2Left = other.getLeftChannel();
+
+        checksWavesLength(other);
+
+        //find a1:
+        double a1 = 0;
+        double tempA;
+        for (int t = 0; t < wave2Right.length; t++){
+            tempA = (wave2Right[t] * wave2Right[t]) + (wave2Left[t] * wave2Left[t]);
+            a1 = a1 + tempA;
+        }
+
+        //find b1:
+        double b1 = 0;
+        double tempB;
+        for (int t = 0; t < wave1Right.length; t++){
+            tempB = (wave1Right[t] * wave2Right[t]) + (wave1Left[t] * wave2Left[t]);
+            b1 = b1 + tempB;
+        }
+
+        //find b2:
+        double b2 = b1;
+
+        //find c1:
+        double c1 = 0;
+        double tempC;
+        for (int t = 0; t < wave1Right.length; t++){
+            tempC = (wave1Right[t] * wave1Right[t]) + (wave1Left[t] + wave1Left[t]);
+            c1 = c1 + tempC;
+        }
+
+        //find a2:
+        double a2 = c1;
+
+        //find c2:
+        double c2 = a1;
+
+        //find beta1:
+        double beta1 = 0;
+        if (a1 != 0){
+            beta1 = b1 / a1;
+        }
+        else {
+            a1 = a1 + 0.0000000001;
+        }
+
+        //find beta2:
+        double beta2 = 0;
+        if (a2 != 0){
+            beta2 = b2 / a2;
+        }
+        else {
+            a2 = a2 + 0.0000000001;
+        }
+
+        //find similarity1:
+        double similarity1 = 1 / (1 + (beta1*beta1)*(a1) - 2*(beta1)*(b1) + c1);
+
+        //find similarity2:
+        double similarity2 = 1 / (1 + (beta2*beta2)*(a2) - 2*(beta2)*(b2) + c2);
+
+        double similarity = (similarity1 + similarity2)/2;
+        return similarity;
     }
 
     /**
