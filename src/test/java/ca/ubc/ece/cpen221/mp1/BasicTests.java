@@ -86,6 +86,31 @@ public class BasicTests {
 
     }
 
+    //testing append with an empty array and a duplicate array
+    @Test
+    public void testAppendEmpty() {
+
+        double[] lchannel = {1.0, 0.5, -0.5, -1.0};
+        double[] rchannel = {1.0, 0.2, -0.3, -1.0};
+        double[] lchannelAppend = new double[0];
+        double[] rchannelAppend = {1.0, .2, -0.3, -1.0};
+        double[] lchannelAppended = { 1.0, 0.5, -0.5, -1.0};
+        double[] rchannelAppended = { 1.0, 0.2, -0.3, -1.0, 1.0, 0.2, -0.3, -1.0};
+
+
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+        SoundWave waveAppend = new SoundWave(lchannelAppend, rchannelAppend);
+        wave.append(waveAppend);
+
+        double[] lchannel1 = wave.getLeftChannel();
+
+        double[] rchannel1 = wave.getRightChannel();
+
+        Assert.assertArrayEquals(rchannelAppended, rchannel1, 0.00001);
+        Assert.assertArrayEquals(lchannelAppended, lchannel1, 0.00001);
+
+    }
+
     //testing append method using individual left and right channels
     @Test
     public void testAppend1() {
@@ -190,8 +215,6 @@ public class BasicTests {
         double amp = .5;
         double phase = 2;
         double duration = 5;
-        double [] rchannel = new double[5*44100 + 1];
-        double [] lchannel = new double[5*44100 + 1];
 
         SoundWave wave = new SoundWave(freq, phase, amp, duration);
         SoundWave echoedWave = wave.addEcho(delta, alpha);
@@ -210,6 +233,39 @@ public class BasicTests {
         Assert.assertEquals(valueAtOneSecond, calculatedValueAtOneSecond, 0.00001);
         Assert.assertEquals(valueAtTwoAndHalfSeconds, calculatedValueAtTwoAndHalfSeconds, 0.00001);
         Assert.assertEquals(valueAtSixSeconds, calculatedValueAtSixSeconds, 0.00001);
+    }
+
+    //testing echo with delta greater than or equal to array length
+    @Test
+    public void testEchoLargeDelta() {
+        double[] lchannel = {1, 0.5, 0.2, -1, 0.75, -0.1};
+        double[] rchannel = {0.6, -0.7, 0.95, 1, 0.5, 0.35};
+        double[] lchannelManualEcho = {1, 0.5, 0.2, -1, 0.75, -0.1};
+        double alpha = 1;
+        int delta = 6;
+
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+        SoundWave echoedWave = wave.addEcho(delta, alpha);
+        double[] lchannelEchoed = echoedWave.getLeftChannel();
+
+        Assert.assertArrayEquals(lchannelEchoed, lchannelManualEcho, 0.0001);
+    }
+
+    //testing echo with alpha = 1
+    @Test
+    public void testManualEcho() {
+        double [] lchannel = {1, 0.5, 0.2, -1, 0.75, -0.1};
+        double [] rchannel = {0.6, -0.7, 0.95, 1, 0.5, 0.35};
+        double [] lchannelManualEcho = {1, 0.5, 1, -.5, 0.95, -1, 0.75, -0.1};
+        double alpha = 1;
+        int delta = 2;
+
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+        SoundWave echoedWave = wave.addEcho(delta, alpha);
+        double [] lchannelEchoed = echoedWave.getLeftChannel();
+
+        Assert.assertArrayEquals(lchannelEchoed, lchannelManualEcho, 0.0001);
+
     }
 
 
@@ -303,6 +359,66 @@ public class BasicTests {
         boolean ans = wave.contains(contained);
 
         Assert.assertEquals(ans, true);
+    }
+
+    //check contains with negative scaling factor
+    @Test
+    public void testContainsScaling() {
+
+        double[] rchannel = {1, 1, 0.5, 0.5, 1, 1, 0.5, -1};
+        double[] lchannel = {0.75, 0.75, 0.5, 0.25, 1, -1, 1, 1};
+        double[] rcontained = {-0.5, -0.25, 0.5};
+        double[] lcontained = {0.5, -0.5, -0.5};
+
+        SoundWave contained = new SoundWave(lcontained, rcontained);
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+
+        boolean ans = wave.contains(contained);
+
+        Assert.assertEquals(ans, true);
+
+    }
+
+    //check contains with a sinusoidal wave
+    @Test
+    public void testContains1() {
+
+        SoundWave contained = new SoundWave(501, 2, 1, 4);
+        SoundWave wave = new SoundWave(100, 0, 0.5, 2);
+
+        wave.append(contained);
+
+        boolean ans = wave.contains(contained);
+
+        Assert.assertEquals(ans, true);
+    }
+
+    //check contains for false
+    @Test
+    public void testContainsFalse() {
+        double[] rchannel = {1, 1, 0.5, 0.5, 1, 1, 0.5, -1};
+        double[] lchannel = {0.75, 0.75, 0.5, 0.25, 1, -1, 1, 1};
+        double[] rcontained = {0.2, 0.5, 1};
+        double[] lcontained = {0.5, 0.25, 1};
+
+        SoundWave contained = new SoundWave(lcontained, rcontained);
+        SoundWave wave = new SoundWave(lchannel, rchannel);
+
+        boolean ans = wave.contains(contained);
+
+        Assert.assertEquals(ans, false);
+    }
+
+    //test similarity for an empty wave
+    @Test
+    public void testEmptySimilarity() {
+        SoundWave empty = new SoundWave();
+        SoundWave wave = new SoundWave(100, 0, 0.5, 2);
+
+        double ans = 0;
+        double similarity = wave.similarity(empty);
+
+        Assert.assertEquals(ans, similarity, 0.0001);
     }
 }
 

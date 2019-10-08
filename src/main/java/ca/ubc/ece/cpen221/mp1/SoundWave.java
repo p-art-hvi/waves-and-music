@@ -241,12 +241,23 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         ArrayList<Double> lEcho = new ArrayList<>();
         ArrayList<Double> rEcho = new ArrayList<>();
 
-        double[] lEchoArray = HelperMethods.addEcho(delta, lEcho, alpha, lchannel);
-        double[] rEchoArray = HelperMethods.addEcho(delta, rEcho, alpha, rchannel);
-
-        SoundWave echo = new SoundWave(lEchoArray, rEchoArray);
-
-        return echo;
+        if (delta >= lchannel.size() && delta >= rchannel.size()) {
+            SoundWave echo = new SoundWave(getLeftChannel(), getRightChannel());
+            return echo;
+        } else if (delta >= lchannel.size()) {
+            double[] rEchoArray = HelperMethods.addEcho(delta, rEcho, alpha, rchannel);
+            SoundWave echo = new SoundWave(getLeftChannel(), rEchoArray);
+            return echo;
+        } else if (delta >= rchannel.size()) {
+            double[] lEchoArray = HelperMethods.addEcho(delta, lEcho, alpha, lchannel);
+            SoundWave echo = new SoundWave(lEchoArray, getRightChannel());
+            return echo;
+        } else {
+            double[] lEchoArray = HelperMethods.addEcho(delta, lEcho, alpha, lchannel);
+            double[] rEchoArray = HelperMethods.addEcho(delta, rEcho, alpha, rchannel);
+            SoundWave echo = new SoundWave(lEchoArray, rEchoArray);
+            return echo;
+        }
     }
 
     /**
@@ -382,6 +393,12 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] wave1Left = getLeftChannel();
         double[] wave2Right = other.getRightChannel();
         double[] wave2Left = other.getLeftChannel();
+
+        if (wave1Left.length == 0 && wave1Right.length == 0) {
+            return 0;
+        } else if (wave2Left.length == 0 && wave2Right.length == 0) {
+            return 0;
+        }
 
         checksWavesLength(other);
 

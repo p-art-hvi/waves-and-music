@@ -54,8 +54,7 @@ public class HelperMethods {
         }
 
         for (int i = delta; i < channel.size(); i++) {
-            double echoValue = channel.get(i)
-                    + echo.get(i - delta) * alpha;
+            double echoValue = channel.get(i) + channel.get(i - delta) * alpha;
             echo.add(echoValue);
         }
 
@@ -66,9 +65,9 @@ public class HelperMethods {
         double[] echoArray = new double[echo.size()];
 
         for (int j = 0; j < echo.size(); j++) {
-            if (echo.get(j) > 1) {
+            if (echo.get(j) >= max) {
                 echoArray[j] = max;
-            } else if (echo.get(j) < -1) {
+            } else if (echo.get(j) <= min) {
                 echoArray[j] = min;
             } else {
                 echoArray[j] = echo.get(j);
@@ -126,24 +125,5 @@ public class HelperMethods {
         }
         return scaled;
     }
-
-  /*  public static boolean helpContains (double[] channel, double [] otherChannel) {
-
-        boolean contain = false;
-        for(int b = 0; b < channel.length * SoundWave.SAMPLES_PER_SECOND; b++){
-            for(int a = 0; a < otherChannel.length * SoundWave.SAMPLES_PER_SECOND; a++){
-                if((otherChannel[a]/channel[b]) == (otherChannel[a + 1]/channel[b + 1])){
-                    for(int i = a; i < otherChannel.length* SoundWave.SAMPLES_PER_SECOND; i++){
-                        if((otherChannel[i]/channel[b]) == (otherChannel[i + 1]/channel[b + 1])){
-                            contain = true;
-                        } else {
-                            contain = false;
-                        }
-                    }
-                }
-            }
-        }
-        return contain;
-    }*/
 
 }
