@@ -327,10 +327,24 @@ public class BasicTests {
 
         SoundWave wave = new SoundWave(lchannel, rchannel);
         double DFT = wave.highAmplitudeFreqComponent();
-        double ans = 1.0;//0.0;
+        double ans = 0.0;
 
         Assert.assertEquals(ans, DFT, 0.0001);
     }
+
+    /**
+    @Test
+    public void testDFT2() {
+        double[] lchannel = {1.0, 2.0, 5.0};
+        double[] rchannel = {2.0, 2.0, 7.0};
+
+        SoundWave s = new SoundWave(lchannel, rchannel);
+
+        double dft = s.highAmplitudeFreqComponent();
+        double ans = 29400.0;
+        assertEquals(ans, dft, 0.0001);
+    }
+    */
 
     //checks DFT for real sinusoidal waves
     @Test
@@ -420,6 +434,72 @@ public class BasicTests {
 
         Assert.assertEquals(ans, similarity, 0.0001);
     }
+
+    //test similarity for different channel lengths:
+    @Test
+    public void testSimilarityDiffChannelLengths(){
+        double[] rchannel1 = {1.0, 2.0, 3.0, 4.0};
+        double[] lchannel1 = {1.0, 2.0, 3.0, 4.0};
+        SoundWave s = new SoundWave(lchannel1, rchannel1);
+        double[] rchannel2 = {1.0, 2.0, 3.0};
+        double[] lchannel2 = {1.0, 2.0, 3.0, 4.0};
+        SoundWave other = new SoundWave(lchannel2, rchannel2);
+
+        double ans = 0.0686788;
+        double similarity = s.similarity(other);
+
+        Assert.assertEquals(ans, similarity, 0.0001);
+    }
+
+    //test similarity for waves of different lengths and channels of different lengths:
+    @Test
+    public void testSimilarityDiffWaveLengths(){
+        double[] rchannel1 = {0.5, 2.0, 3.2, 4.1};
+        double[] lchannel1 = {0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.8};
+        SoundWave s = new SoundWave(lchannel1, rchannel1);
+        double[] rchannel2 = {0.2, 0.6, 0.7};
+        double[] lchannel2 = {0.3, 2.1};
+        SoundWave other = new SoundWave(lchannel2, rchannel2);
+
+        double ans = 0.1007566;
+        double similarity = s.similarity(other);
+
+        Assert.assertEquals(ans, similarity, 0.0001);
+    }
+
+    //test similarity for when similarity is 1:
+    @Test
+    public void testSimilarityEqualsOne(){
+        double[] rchannel1 = {0, 0, 0, 0};
+        double[] lchannel1 = {0, 0, 0, 0, 0, 0};
+        SoundWave s = new SoundWave(lchannel1, rchannel1);
+        double[] rchannel2 = {0, 0, 0};
+        double[] lchannel2 = {0, 0, 0, 0, 0, 0, 0};
+        SoundWave other = new SoundWave(lchannel2, rchannel2);
+
+        double ans = 1;
+        double similarity = s.similarity(other);
+
+        Assert.assertEquals(ans, similarity, 0.000001);
+    }
+
+    //test similarity for when beta is equal to zero:
+
+    @Test
+    public void testSimilarityBetaEqualsOne(){
+        double[] rchannel1 = {0, 0, 0, 0};
+        double[] lchannel1 = {0, 0, 0, 0};
+        SoundWave s = new SoundWave(lchannel1, rchannel1);
+        double[] rchannel2 = {0.5, 1.0, 1.5, 2.0};
+        double[] lchannel2 = {1.0, 1.5, 2.0, 2.5};
+        SoundWave other = new SoundWave(lchannel2, rchannel2);
+
+        double ans = 0.52273;
+        double similarity = s.similarity(other);
+
+        Assert.assertEquals(ans, similarity, 0.00001);
+    }
+
 }
 
 
