@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 
 public class BasicTests {
-    //testing the left and right channel getters
+    /**
+     * testing the left and right channel getters
+     */
+
     @Test
     public void testCreateWave() {
         double[] lchannel = {1.0, -1.0};
@@ -20,7 +23,10 @@ public class BasicTests {
         Assert.assertArrayEquals(rchannel, rchannel1, 0.00001);
     }
 
-    //testing a null wave as a default
+    /**
+     * testing a null wave as a default
+     */
+
     @Test
     public void testEmptyWave() {
         double [] lchannel = new double [0];
@@ -33,7 +39,9 @@ public class BasicTests {
         Assert.assertArrayEquals(rchannel, rchannel1, 0.00001);
     }
 
-    //testing creating SoundWave object using the wave equation
+    /**
+     * testing creating SoundWave object using the wave equation
+     */
     @Test
     public void testWaveFromScratch() {
 
@@ -61,7 +69,9 @@ public class BasicTests {
         Assert.assertArrayEquals(lchannel, lchannel1, 0.00001);
     }
 
-    //testing append method using another SoundWave object
+    /**
+     * testing append method using another SoundWave object
+     */
     @Test
     public void testAppend() {
 
@@ -86,7 +96,9 @@ public class BasicTests {
 
     }
 
-    //testing append with an empty array and a duplicate array
+    /**
+     * testing append with an empty array and a duplicate array
+     */
     @Test
     public void testAppendEmpty() {
 
@@ -111,7 +123,9 @@ public class BasicTests {
 
     }
 
-    //testing append method using individual left and right channels
+    /**
+     * testing append method using individual left and right channels
+     */
     @Test
     public void testAppend1() {
         double[] lchannel = {1.0, 0.5, -0.5, -1.0};
@@ -133,8 +147,9 @@ public class BasicTests {
         Assert.assertArrayEquals(lchannelAppended, lchannel1, 0.00001);
     }
 
-    //test add function using multiple channels of the same length
-    //checks for capping off at max/min values (+1/-1)
+    /**
+     * test add function using multiple channels of the same length and checks for capping off at max/min values (+1/-1)
+     */
     @Test
     public void testAdd() {
         double[] lchannel = {1.0, 0.5, -0.5, -1.0};
@@ -157,7 +172,9 @@ public class BasicTests {
         Assert.assertArrayEquals(lchannelAdded, lchannel1, 0.00001);
     }
 
-    //test adding channels of varying lengths - added channel shorter than original channel
+    /**
+     * test adding channels of varying lengths - added channel shorter than original channel
+     */
     @Test
     public void testAdd1() {
         double[] lchannel = {1.0, 0.5, -0.5, -1.0, 1.0};
@@ -181,7 +198,9 @@ public class BasicTests {
 
     }
 
-    //test adding channels of varying lengths - added channel longer than original channel
+    /**
+     * test adding channels of varying lengths - added channel longer than original channel
+     */
     @Test
     public void testAdd2() {
         double[] lchannel = {1.0, 0.5, -0.5};
@@ -205,7 +224,9 @@ public class BasicTests {
 
     }
 
-    //testing echo function at indexes before the echo, during the echo, and after the initial SoundWave
+    /**
+     * testing echo function at indexes before the echo, during the echo, and after the initial SoundWave
+     */
     @Test
     public void testEcho() {
         double alpha = 0.2;
@@ -235,7 +256,10 @@ public class BasicTests {
         Assert.assertEquals(valueAtSixSeconds, calculatedValueAtSixSeconds, 0.00001);
     }
 
-    //testing echo with delta greater than or equal to array length
+    /**
+     * testing echo with delta greater than or equal to array length
+     */
+
     @Test
     public void testEchoLargeDelta() {
         double[] lchannel = {1, 0.5, 0.2, -1, 0.75, -0.1};
@@ -251,7 +275,9 @@ public class BasicTests {
         Assert.assertArrayEquals(lchannelEchoed, lchannelManualEcho, 0.0001);
     }
 
-    //testing echo with alpha = 1
+    /**
+     * testing echo with alpha = 1
+     */
     @Test
     public void testManualEcho() {
         double [] lchannel = {1, 0.5, 0.2, -1, 0.75, -0.1};
@@ -268,7 +294,10 @@ public class BasicTests {
 
     }
 
-    //testing echo with only rchannel affected
+    /**
+     * testing echo with only rchannel affected
+     */
+
     @Test
     public void testrchannelEcho() {
         double [] lchannel = {1, 0.5, 0.2};
@@ -287,7 +316,10 @@ public class BasicTests {
         Assert.assertArrayEquals(rchannelEchoed, rchannelManualEcho, 0.0001);
     }
 
-    //testing echo with only lchannel affected
+    /**
+     * testing echo with only lchannel affected
+     */
+
     @Test
     public void testlchannelEcho() {
         double [] rchannel = {1, 0.5, 0.2};
@@ -308,7 +340,9 @@ public class BasicTests {
     }
 
 
-    //test scale function and ability to cap off values at min/max (-1/+1)
+    /**
+     * test scale function and ability to cap off values at min/max (-1/+1)
+     */
     @Test
     public void testScaling() {
         double [] lchannel = {1, 0.5, 0.2, -1, 0.75, -0.1};
@@ -328,7 +362,10 @@ public class BasicTests {
         Assert.assertArrayEquals(lchannelManualScale, lchannelScaled, 0.0001);
     }
 
-    //testing high pass filter at various indexes
+    /**
+     * testing high pass filter at various indexes
+     */
+
     @Test
     public void testHPF() {
         int interval = 2*44100;
@@ -358,7 +395,10 @@ public class BasicTests {
 
     }
 
-    //tests cutoff frequency feature of HPF
+    /**
+     * tests cutoff frequency feature of HPF
+     */
+
     @Test
     public void testHPF2() {
         SoundWave wave1 = new SoundWave(200, 0, 0, 1);
@@ -373,12 +413,12 @@ public class BasicTests {
         Assert.assertArrayEquals(wave1.getLeftChannel(), wave4.getLeftChannel(), 0.0001);
     }
 
-    //tests basic DFT function
+    /**
+     * tests basic DFT function
+     */
+
     @Test
     public void testDFT() {
-        //double [] rchannel = {1, 1};
-        //double [] lchannel = {1, 1};
-
         SoundWave wave = new SoundWave(500.0, 0.0, 0.3, 0.03);
         double DFT = wave.highAmplitudeFreqComponent();
         double ans = 500;
@@ -386,7 +426,10 @@ public class BasicTests {
         Assert.assertEquals(ans, DFT, 44100.0/(44100.0*0.03));
     }
 
-    //checks DFT for real sinusoidal waves
+    /**
+     * checks DFT for real sinusoidal waves
+     */
+
     @Test
     public void testDFTRealWave() {
         SoundWave wave1 = new SoundWave(501, 0, 1, 0.05);
@@ -399,7 +442,10 @@ public class BasicTests {
         Assert.assertEquals(ans, DFT, 44100.0 / (44100.0 * 0.05));
     }
 
-    //check DFT with TA's inputs
+    /**
+     * check DFT with TA's inputs
+     */
+
     @Test
     public void testDFT1() {
         SoundWave wave1 = new SoundWave(201, 0, 0.6, 0.05);
@@ -412,7 +458,10 @@ public class BasicTests {
         Assert.assertEquals(ans, DFT, 1);
     }
 
-    //check contains for no scaling factor
+    /**
+     *  check contains for no scaling factor
+     */
+
     @Test
     public void testContains() {
         double[] rchannel = {1, 1, 0.5, 0.5, 1, 1, 0.5, -1};
@@ -428,7 +477,10 @@ public class BasicTests {
         Assert.assertEquals(ans, true);
     }
 
-    //check contains with negative scaling factor
+    /**
+     * check contains with negative scaling factor
+     */
+
     @Test
     public void testContainsScaling() {
 
@@ -446,7 +498,10 @@ public class BasicTests {
 
     }
 
-    //check contains with a sinusoidal wave
+    /**
+     * check contains with a sinusoidal wave
+     */
+
     @Test
     public void testContains1() {
 
@@ -460,7 +515,10 @@ public class BasicTests {
         Assert.assertEquals(ans, true);
     }
 
-    //check contains for false
+    /**
+     * check contains for false
+     */
+
     @Test
     public void testContainsFalse() {
         double[] rchannel = {1, 1, 0.5, 0.5, 1, 1, 0.5, -1};
@@ -476,7 +534,10 @@ public class BasicTests {
         Assert.assertEquals(ans, false);
     }
 
-    //test contains with different channel lengths
+    /**
+     * test contains with different channel lengths
+     */
+
     @Test
     public void testContainsDifferentChannelLengths() {
         double[] rchannel = {1, 1, 0.5, 0.5, 1, 1, 0.5, 1, 2, 3};
@@ -491,8 +552,11 @@ public class BasicTests {
 
         Assert.assertEquals(ans, true);
     }
-    
-    //test similarity for different channel lengths:
+
+    /**
+     * test similarity for different channel lengths:
+     */
+
     @Test
     public void testSimilarityDiffChannelLengths(){
         double[] rchannel1 = {1.0, 2.0, 3.0, 4.0};
@@ -524,7 +588,9 @@ public class BasicTests {
         Assert.assertEquals(ans, similarity, 0.0001);
     }
 
-    //test similarity for when similarity is 1:
+    /**
+     * test similarity for when similarity is 1:
+     */
     @Test
     public void testSimilarityEqualsOne(){
         double[] rchannel1 = {0, 0, 0, 0};
@@ -540,7 +606,9 @@ public class BasicTests {
         Assert.assertEquals(ans, similarity, 0.000001);
     }
 
-    //test similarity for when beta is equal to zero:
+    /**
+     * test similarity for when beta is equal to zero:
+     */
 
     @Test
     public void testSimilarityBetaEqualsOne(){

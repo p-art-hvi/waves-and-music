@@ -40,6 +40,11 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
     }
 
+    /**
+     * checks whether the right channel is the same length as the left channel
+     * if the lengths are different it adds zeroes to the end of the shorter channel
+     */
+    public void checksLength(){
     public void checksLength() {
         int size = rchannel.size();
         if (lchannel.size() > size) {
@@ -56,6 +61,14 @@ public class SoundWave implements HasSimilarity<SoundWave> {
     }
 
     public void checksWavesLength(SoundWave s) {
+    /**
+     * compares the lengths of the right channels of both waves and then
+     * compares the lengths of the left channels of both waves to
+     * check whether they are the same length.
+     * if they are different lengths, zeroes are added to the end of the shorter channels.
+     * @param s
+     */
+    public void checksWavesLength(SoundWave s){
         checksLength();
         s.checksLength();
         int sizeR = rchannel.size();
