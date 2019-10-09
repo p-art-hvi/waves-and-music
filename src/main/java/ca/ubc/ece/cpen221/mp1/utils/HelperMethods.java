@@ -9,6 +9,16 @@ public class HelperMethods {
     public static final int MAX = 1;
     public static final int MIN = -1;
 
+
+    /**
+     * adds (superimposes) two waves
+     *
+     * @param channelA is not null and represents the same side (left/right)
+     *                 channel as channelB, of one SoundWave.
+     * @param channelB is not null and represents the same side (left/right)
+     *                 channel as channelA, of another SoundWave.
+     * @return channel with the wo waves superimposed, capped at +1/-1
+     */
     public static double[] add(double[] channelA, double[] channelB) {
         int size = 0;
         if (channelA.length >= channelB.length) {
@@ -44,6 +54,15 @@ public class HelperMethods {
         return newChannel;
     }
 
+    /**
+     * Create a new channel with one wave echoed onto the other
+     *
+     * @param delta > 0. delta is the lag between this wave and the echo wave.
+     * @param echo empty ArrayList to store echoed SoundWave.
+     * @param alpha > 0 >= 1. alpha is the damping factor applied to the echo wave.
+     * @param channel channel of SoundWave to echo
+     * @return channel with an echo applied
+     */
 
     public static double[] addEcho(int delta, ArrayList<Double> echo,
                                    double alpha, List<Double> channel) {
@@ -75,7 +94,22 @@ public class HelperMethods {
         return echoArray;
     }
 
-    public static int helpDFT(int channelSize, double [] channel, int highestFreq,
+    /**
+     * Return the frequency of the component with the greatest amplitude
+     * contribution to this wave. This component is obtained by applying the
+     * Discrete Fourier Transform to this wave.
+     *
+     * @param channelSize size of channel being used
+     * @param channel array of channel being used
+     * @param highestFreq previous highest frequency
+     * @param highestFreqAmplitude empty ComplexNumber
+     * @param temp temporary ComplexNumber
+     * @return the frequency of the wave component of highest amplitude.
+     * If more than one frequency has the same amplitude contribution then
+     * return the higher frequency.
+     */
+
+    public static double helpDFT(int channelSize, double [] channel, double highestFreq,
                               ComplexNumber highestFreqAmplitude, ComplexNumber temp) {
         double imaginaryPart;
         double realPart;
@@ -102,6 +136,15 @@ public class HelperMethods {
         return highestFreq;
     }
 
+    /**
+     * Return a new sound wave that is obtained by applying a high-pass filter to
+     * this wave.
+     *
+     * @param alpha >= 0.   RC / (RC + dt)
+     * @param channel channel to apply high pass filter to
+     * @return channel with HPF applied
+     */
+
     public static double [] helpHPF(double alpha, double [] channel) {
         double[] channelArray = new double[channel.length];
         channelArray[0] = channel[0];
@@ -113,6 +156,15 @@ public class HelperMethods {
         return channelArray;
     }
 
+    /**
+     * Scale the amplitude of this wave by a scaling factor.
+     * After scaling, the amplitude values are clipped to remain
+     * between -1 and +1.
+     *
+     * @param channel is the channel of SoundWave to scale
+     * @param scalingFactor is a value > 0.
+     * @return ArrayList of the scaled channel.
+     */
     public static ArrayList<Double> scale(List<Double> channel, double scalingFactor) {
 
         ArrayList<Double> scaled = new ArrayList<>();

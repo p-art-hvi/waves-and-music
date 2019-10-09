@@ -50,8 +50,8 @@ public class BasicTests {
         double phase = 2;
         double duration = 5;
         double time = 0;
-        double [] rchannel = new double[5*44100 + 1];
-        double [] lchannel = new double[5*44100 + 1];
+        double [] rchannel = new double[5 * 44100 + 1];
+        double [] lchannel = new double[5 * 44100 + 1];
         int i = 0;
 
         SoundWave wave = new SoundWave(freq, phase, amp, duration);
@@ -148,7 +148,8 @@ public class BasicTests {
     }
 
     /**
-     * test add function using multiple channels of the same length and checks for capping off at max/min values (+1/-1)
+     * test add function using multiple channels of the same length
+     * and checks for capping off at max/min values (+1/-1)
      */
     @Test
     public void testAdd() {
@@ -225,12 +226,13 @@ public class BasicTests {
     }
 
     /**
-     * testing echo function at indexes before the echo, during the echo, and after the initial SoundWave
+     * testing echo function at indexes before the echo,
+     * during the echo, and after the initial SoundWave
      */
     @Test
     public void testEcho() {
         double alpha = 0.2;
-        int delta = 2*44100;
+        int delta = 2 * 44100;
 
         double freq = 70;
         double amp = .5;
@@ -248,7 +250,7 @@ public class BasicTests {
         double calculatedValueAtSixSeconds =  0.2 * amp * Math.sin(2 * 4 * Math.PI * freq + phase);
 
         double valueAtOneSecond = rchannelEchoed[44100];
-        double valueAtTwoAndHalfSeconds = rchannelEchoed[(int)(44100 * 2.5)];
+        double valueAtTwoAndHalfSeconds = rchannelEchoed[(int) (44100 * 2.5)];
         double valueAtSixSeconds = lchannelEchoed[(44100 * 6)];
 
         Assert.assertEquals(valueAtOneSecond, calculatedValueAtOneSecond, 0.00001);
@@ -368,9 +370,9 @@ public class BasicTests {
 
     @Test
     public void testHPF() {
-        int interval = 2*44100;
-        double timeConstant = 2*44100;
-        double alpha = timeConstant/(timeConstant + interval);
+        int interval = 2 * 44100;
+        double timeConstant = 2 * 44100;
+        double alpha = timeConstant / (timeConstant + interval);
 
         double [] rchannel = {-.9, 0.1, 0.65, 1, 0, .75};
         double [] lchannel = {0.5, 1, 0.75, -0.5, 0.9, 0.2};
@@ -386,9 +388,9 @@ public class BasicTests {
                 + rchannel[1] - rchannel[0]) + alpha * (rchannel[2] - rchannel[1]);
 
         double value5 = rchannelHPF[5];
-        double calculatedValue5 = alpha * (rchannel[5] - rchannel[4]) +
-                alpha * (alpha * (alpha * calculatedValue2 + alpha *
-                        (rchannel[3] - rchannel[2])) + alpha * (rchannel[4] - rchannel[3]));
+        double calculatedValue5 = alpha * (rchannel[5] - rchannel[4])
+                + alpha * (alpha * (alpha * calculatedValue2 + alpha
+                       * (rchannel[3] - rchannel[2])) + alpha * (rchannel[4] - rchannel[3]));
 
         Assert.assertEquals(calculatedValue2, value2, 0.0001);
         Assert.assertEquals(calculatedValue5, value5, 0.0001);
@@ -408,7 +410,8 @@ public class BasicTests {
         wave1.checksWavesLength(wave2);
         double cutoff = 123;
         SoundWave wave3 = wave1.add(wave2);
-        SoundWave wave4 = wave3.highPassFilter(1, SoundWave.SAMPLES_PER_SECOND/(2 * Math.PI * cutoff));
+        SoundWave wave4 =
+                wave3.highPassFilter(1, SoundWave.SAMPLES_PER_SECOND / (2 * Math.PI * cutoff));
 
         Assert.assertArrayEquals(wave1.getLeftChannel(), wave4.getLeftChannel(), 0.0001);
     }
@@ -423,7 +426,7 @@ public class BasicTests {
         double DFT = wave.highAmplitudeFreqComponent();
         double ans = 500;
 
-        Assert.assertEquals(ans, DFT, 44100.0/(44100.0*0.03));
+        Assert.assertEquals(ans, DFT, 44100.0 / (44100.0 * 0.03));
     }
 
     /**
@@ -558,7 +561,7 @@ public class BasicTests {
      */
 
     @Test
-    public void testSimilarityDiffChannelLengths(){
+    public void testSimilarityDiffChannelLengths() {
         double[] rchannel1 = {1.0, 2.0, 3.0, 4.0};
         double[] lchannel1 = {1.0, 2.0, 3.0, 4.0};
         SoundWave s = new SoundWave(lchannel1, rchannel1);
@@ -572,9 +575,12 @@ public class BasicTests {
         Assert.assertEquals(ans, similarity, 0.0001);
     }
 
-    //test similarity for waves of different lengths and channels of different lengths:
+    /**
+     * test similarity for waves of different lengths and channels of different lengths:
+     */
+
     @Test
-    public void testSimilarityDiffWaveLengths(){
+    public void testSimilarityDiffWaveLengths() {
         double[] rchannel1 = {0.5, 2.0, 3.2, 4.1};
         double[] lchannel1 = {0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.8};
         SoundWave s = new SoundWave(lchannel1, rchannel1);
@@ -592,7 +598,7 @@ public class BasicTests {
      * test similarity for when similarity is 1:
      */
     @Test
-    public void testSimilarityEqualsOne(){
+    public void testSimilarityEqualsOne() {
         double[] rchannel1 = {0, 0, 0, 0};
         double[] lchannel1 = {0, 0, 0, 0, 0, 0};
         SoundWave s = new SoundWave(lchannel1, rchannel1);
@@ -611,7 +617,7 @@ public class BasicTests {
      */
 
     @Test
-    public void testSimilarityBetaEqualsOne(){
+    public void testSimilarityBetaEqualsOne() {
         double[] rchannel1 = {0, 0, 0, 0};
         double[] lchannel1 = {0, 0, 0, 0};
         SoundWave s = new SoundWave(lchannel1, rchannel1);

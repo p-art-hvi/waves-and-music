@@ -12,10 +12,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
     public static final int SAMPLES_PER_SECOND = 44100;
 
-    // some representation fields that you could use
     private List<Double> lchannel = new ArrayList<Double>();
     private List<Double> rchannel = new ArrayList<Double>();
-    private int samples = 0;
 
     /**
      * Create a new SoundWave using the provided left and right channel
@@ -201,7 +199,8 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
     /**
      * Create a new wave by adding another wave to this wave.
-     * (You should also write clear specifications for this method.)
+     * New wave is a superimposed wave of the two original waves
+     * Maximum/minimum values of +1/-1 are achieved
      * @param other the wave to superimpose/add
      */
     public SoundWave add(SoundWave other) {
@@ -266,7 +265,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
      *
      * @param dt >= 0. dt is the time interval used in the filtering process.
      * @param RC > 0. RC is the time constant for the high-pass filter.
-     * @return
+     * @return SoundWave with HPF applied
      */
     public SoundWave highPassFilter(int dt, double RC) {
         double[] rchannel = getRightChannel();
@@ -293,9 +292,9 @@ public class SoundWave implements HasSimilarity<SoundWave> {
 
         checksLength();
         int N = rchannel.size();
-        int highestFreqRight = 0;
+        double highestFreqRight = 0;
         ComplexNumber highestFreqAmpR = new ComplexNumber(0.0, 0.0);
-        int highestFreqLeft = 0;
+        double highestFreqLeft = 0;
         ComplexNumber highestFreqAmpL = new ComplexNumber(0.0, 0.0);
         ComplexNumber temp1 = new ComplexNumber(0.0, 0.0);
         ComplexNumber temp2 = new ComplexNumber(0.0, 0.0);
