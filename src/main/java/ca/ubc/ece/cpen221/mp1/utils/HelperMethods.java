@@ -78,8 +78,8 @@ public class HelperMethods {
 
     public static int helpDFT (int channelSize, double [] channel, int highestFreq, ComplexNumber highestFreqAmplitude, ComplexNumber temp) {
 
-        for (int freq = 0; freq < channelSize - 1; freq++) {
-            for (int t = 0; t < channelSize - 1; t++) {
+        for (int freq = 0; freq < channelSize - highestFreq; freq++) {
+            for (int t = 0; t < channelSize; t++) {
                 //implement a complex number type.
                 double imaginaryPart = (-1)*(Math.sin((2 * Math.PI * freq * t) / channelSize));
                 double realPart = Math.cos((2 * Math.PI * freq * t)/ channelSize);

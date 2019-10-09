@@ -6,9 +6,9 @@ public class ComplexNumber {
     //used to format the complex number as R.cis(theta)
     public static final int RCIS = 1;
     //the real part of the complex number
-    private double real;
+    public double real;
     //the imaginary part of the complex number
-    private double imaginary;
+    public double imaginary;
 
     //constructs a new complex number object
     public ComplexNumber(){
