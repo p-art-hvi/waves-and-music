@@ -416,8 +416,8 @@ public class BasicTests {
     //check DFT with TA's inputs
     @Test
     public void testDFT1() {
-        SoundWave wave1 = new SoundWave(201, 0, 0.6, 0.5);
-        SoundWave wave2 = new SoundWave(1552, 0, 0.4, 0.5);
+        SoundWave wave1 = new SoundWave(201, 0, 0.6, 0.05);
+        SoundWave wave2 = new SoundWave(1552, 0, 0.4, 0.05);
         wave1.append(wave2);
 
         double DFT = wave1.highAmplitudeFreqComponent();
