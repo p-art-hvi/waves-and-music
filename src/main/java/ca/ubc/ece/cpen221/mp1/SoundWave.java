@@ -375,7 +375,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
         double[] wave2Right = other.getRightChannel();
         double[] wave2Left = other.getLeftChannel();
 
-        if ((wave1Right.length == 0 && wave2Right.length == 0) && (wave1Left.length == 0 && wave2Left.length == 0)){
+        if ((wave1Right.length == 0 && wave2Right.length == 0) && (wave1Left.length == 0 && wave2Left.length == 0)) {
             return 1;
         } else if (wave1Left.length == 0 && wave1Right.length == 0) {
             return 0;
@@ -383,64 +383,62 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             return 0;
         }
 
-        //find a1:
-        double a1 = 0;
-        double tempA;
-        for (int t = 0; t < wave2Right.length; t++){
-            tempA = (wave2Right[t] * wave2Right[t]) + (wave2Left[t] * wave2Left[t]);
-            a1 = a1 + tempA;
+            //find a1:
+            double a1 = 0;
+            double tempA;
+            for (int t = 0; t < wave2Right.length; t++) {
+                tempA = (wave2Right[t] * wave2Right[t]) + (wave2Left[t] * wave2Left[t]);
+                a1 = a1 + tempA;
+            }
+
+            //find b1:
+            double b1 = 0;
+            double tempB;
+            for (int t = 0; t < wave1Right.length; t++) {
+                tempB = (wave1Right[t] * wave2Right[t]) + (wave1Left[t] * wave2Left[t]);
+                b1 = b1 + tempB;
+            }
+
+            //find b2:
+            double b2 = b1;
+
+            //find c1:
+            double c1 = 0;
+            double tempC;
+            for (int t = 0; t < wave1Right.length; t++) {
+                tempC = (wave1Right[t] * wave1Right[t]) + (wave1Left[t] * wave1Left[t]);
+                c1 = c1 + tempC;
+            }
+
+            //find a2:
+            double a2 = c1;
+
+            //find c2:
+            double c2 = a1;
+
+            //find beta1:
+            double beta1 = 0;
+            if (a1 != 0) {
+                beta1 = b1 / a1;
+            } else {
+                a1 = a1 + 0.0000000001;
+            }
+
+            //find beta2:
+            double beta2 = 0;
+            if (a2 != 0) {
+                beta2 = b2 / a2;
+            } else {
+                a2 = a2 + 0.0000000001;
+            }
+
+            //find similarity1:
+            double similarity1 = 1 / (1 + (beta1 * beta1) * (a1) - 2 * (beta1) * (b1) + c1);
+
+            //find similarity2:
+            double similarity2 = 1 / (1 + (beta2 * beta2) * (a2) - 2 * (beta2) * (b2) + c2);
+
+            double similarity = (similarity1 + similarity2) / 2;
+            return similarity;
         }
-
-        //find b1:
-        double b1 = 0;
-        double tempB;
-        for (int t = 0; t < wave1Right.length; t++){
-            tempB = (wave1Right[t] * wave2Right[t]) + (wave1Left[t] * wave2Left[t]);
-            b1 = b1 + tempB;
-        }
-
-        //find b2:
-        double b2 = b1;
-
-        //find c1:
-        double c1 = 0;
-        double tempC;
-        for (int t = 0; t < wave1Right.length; t++){
-            tempC = (wave1Right[t] * wave1Right[t]) + (wave1Left[t] * wave1Left[t]);
-            c1 = c1 + tempC;
-        }
-
-        //find a2:
-        double a2 = c1;
-
-        //find c2:
-        double c2 = a1;
-
-        //find beta1:
-        double beta1 = 0;
-        if (a1 != 0){
-            beta1 = b1 / a1;
-        }
-        else {
-            a1 = a1 + 0.0000000001;
-        }
-
-        //find beta2:
-        double beta2 = 0;
-        if (a2 != 0){
-            beta2 = b2 / a2;
-        }
-        else {
-            a2 = a2 + 0.0000000001;
-        }
-
-        //find similarity1:
-        double similarity1 = 1 / (1 + (beta1*beta1)*(a1) - 2*(beta1)*(b1) + c1);
-
-        //find similarity2:
-        double similarity2 = 1 / (1 + (beta2*beta2)*(a2) - 2*(beta2)*(b2) + c2);
-
-        double similarity = (similarity1 + similarity2)/2;
-        return similarity;
     }
-}

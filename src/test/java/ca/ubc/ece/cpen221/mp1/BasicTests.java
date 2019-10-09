@@ -491,19 +491,7 @@ public class BasicTests {
 
         Assert.assertEquals(ans, true);
     }
-
-    //test similarity for an empty wave
-    @Test
-    public void testEmptySimilarity() {
-        SoundWave empty = new SoundWave();
-        SoundWave wave = new SoundWave(100, 0, 0.5, 2);
-
-        double ans = 0;
-        double similarity = wave.similarity(empty);
-
-        Assert.assertEquals(ans, similarity, 0.0001);
-    }
-
+    
     //test similarity for different channel lengths:
     @Test
     public void testSimilarityDiffChannelLengths(){
