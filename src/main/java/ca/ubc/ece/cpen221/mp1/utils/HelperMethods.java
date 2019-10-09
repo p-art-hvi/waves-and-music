@@ -1,15 +1,13 @@
 
 package ca.ubc.ece.cpen221.mp1.utils;
 
-import ca.ubc.ece.cpen221.mp1.SoundWave;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class HelperMethods {
 
-    public static final int max = 1;
-    public static final int min = -1;
+    public static final int MAX = 1;
+    public static final int MIN = -1;
 
     public static double[] add(double[] channelA, double[] channelB) {
         int size = 0;
@@ -36,10 +34,10 @@ public class HelperMethods {
         }
 
         for (int j = 0; j < newChannel.length; j++) {
-            if (newChannel[j] > max) {
-                newChannel[j] = max;
-            } else if (newChannel[j] < min) {
-                newChannel[j] = min;
+            if (newChannel[j] > MAX) {
+                newChannel[j] = MAX;
+            } else if (newChannel[j] < MIN) {
+                newChannel[j] = MIN;
             }
         }
 
@@ -47,7 +45,8 @@ public class HelperMethods {
     }
 
 
-    public static double[] addEcho(int delta, ArrayList<Double> echo, double alpha, List<Double> channel) {
+    public static double[] addEcho(int delta, ArrayList<Double> echo,
+                                   double alpha, List<Double> channel) {
 
         for (int i = 0; i < delta; i++) {
             echo.add(channel.get(i));
@@ -65,10 +64,10 @@ public class HelperMethods {
         double[] echoArray = new double[echo.size()];
 
         for (int j = 0; j < echo.size(); j++) {
-            if (echo.get(j) >= max) {
-                echoArray[j] = max;
-            } else if (echo.get(j) <= min) {
-                echoArray[j] = min;
+            if (echo.get(j) >= MAX) {
+                echoArray[j] = MAX;
+            } else if (echo.get(j) <= MIN) {
+                echoArray[j] = MIN;
             } else {
                 echoArray[j] = echo.get(j);
             }
@@ -76,15 +75,17 @@ public class HelperMethods {
         return echoArray;
     }
 
-    public static int helpDFT (int channelSize, double [] channel, int highestFreq, ComplexNumber highestFreqAmplitude, ComplexNumber temp) {
+    public static int helpDFT(int channelSize, double [] channel, int highestFreq,
+                              ComplexNumber highestFreqAmplitude, ComplexNumber temp) {
         double imaginaryPart;
         double realPart;
         for (int freq = 0; freq < channelSize - highestFreq; freq++) {
             temp.reset();
             for (int t = 0; t < channelSize; t++) {
                 //implement a complex number type.
-                imaginaryPart = (-1.0)*(Math.sin((2.0 * Math.PI * freq * t) / (double) channelSize));
-                realPart = Math.cos((2.0 * Math.PI * freq * t)/ (double) channelSize);
+                imaginaryPart = (-1.0) * (Math.sin((2.0 * Math.PI * freq * t)
+                        / (double) channelSize));
+                realPart = Math.cos((2.0 * Math.PI * freq * t) / (double) channelSize);
                 ComplexNumber complexNumber = new ComplexNumber(realPart, imaginaryPart);
                 ComplexNumber newFreq = ComplexNumber.multiply(complexNumber, channel[t]);
                 temp.add(newFreq);
@@ -101,7 +102,7 @@ public class HelperMethods {
         return highestFreq;
     }
 
-    public static double [] helpHPF (double alpha, double [] channel) {
+    public static double [] helpHPF(double alpha, double [] channel) {
         double[] channelArray = new double[channel.length];
         channelArray[0] = channel[0];
 
@@ -112,16 +113,16 @@ public class HelperMethods {
         return channelArray;
     }
 
-    public static ArrayList<Double> scale (List<Double> channel, double scalingFactor) {
+    public static ArrayList<Double> scale(List<Double> channel, double scalingFactor) {
 
         ArrayList<Double> scaled = new ArrayList<>();
 
         for (int i = 0; i < channel.size(); i++) {
             double scaledVal = scalingFactor * channel.get(i);
-            if (scaledVal >= max) {
-                scaled.add((double)max);
-            } else if (scaledVal <= min) {
-                scaled.add((double)min);
+            if (scaledVal >= MAX) {
+                scaled.add((double) MAX);
+            } else if (scaledVal <= MIN) {
+                scaled.add((double) MIN);
             } else {
                 scaled.add(scaledVal);
             }
