@@ -403,8 +403,8 @@ public class BasicTests {
     //checks DFT for real sinusoidal waves
     @Test
     public void testDFTRealWave() {
-        SoundWave wave1 = new SoundWave(501, 0, 1, 1);
-        SoundWave wave2 = new SoundWave(400, 0, 0.5, 1);
+        SoundWave wave1 = new SoundWave(501, 0, 1, 0.05);
+        SoundWave wave2 = new SoundWave(400, 0, 0.5, 0.05);
 
         SoundWave wave3 = wave1.add(wave2);
         double DFT = wave3.highAmplitudeFreqComponent();
