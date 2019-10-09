@@ -57,4 +57,10 @@ public class ComplexNumber {
         real = this.real + z.real;//z.realComp();
         imaginary = this.imaginary + z.imaginary;//z.imaginaryComp();
     }
+    public void reset(){
+        real = 0.0;
+        imaginary = 0.0;
+    }
+    public double realPart(){return this.real;}
+    public double imagPart(){return this.imaginary;}
 }

@@ -300,7 +300,7 @@ public class SoundWave implements HasSimilarity<SoundWave> {
             highestFreq = highestFreqRight;
         }
 
-        //highestFreq = highestFreq * (SAMPLES_PER_SECOND/N);
+        highestFreq = highestFreq * ((double) SAMPLES_PER_SECOND/ (double) N);
         return highestFreq;
     }
 

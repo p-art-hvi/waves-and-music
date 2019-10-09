@@ -386,20 +386,6 @@ public class BasicTests {
         Assert.assertEquals(ans, DFT, 44100.0/(44100.0*0.03));
     }
 
-    /**
-    @Test
-    public void testDFT2() {
-        double[] lchannel = {1.0, 2.0, 5.0};
-        double[] rchannel = {2.0, 2.0, 7.0};
-
-        SoundWave s = new SoundWave(lchannel, rchannel);
-
-        double dft = s.highAmplitudeFreqComponent();
-        double ans = 29400.0;
-        assertEquals(ans, dft, 0.0001);
-    }
-    */
-
     //checks DFT for real sinusoidal waves
     @Test
     public void testDFTRealWave() {
@@ -410,7 +396,7 @@ public class BasicTests {
         double DFT = wave3.highAmplitudeFreqComponent();
         double ans = 501;
 
-        Assert.assertEquals(ans, DFT, 1);
+        Assert.assertEquals(ans, DFT, 44100.0 / (44100.0 * 0.05));
     }
 
     //check DFT with TA's inputs
