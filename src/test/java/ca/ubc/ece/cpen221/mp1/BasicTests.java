@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 
 public class BasicTests {
-    //testing the left and right channel getters
+    /**
+     * testing the left and right channel getters
+     */
+
     @Test
     public void testCreateWave() {
         double[] lchannel = {1.0, -1.0};
@@ -20,7 +23,10 @@ public class BasicTests {
         Assert.assertArrayEquals(rchannel, rchannel1, 0.00001);
     }
 
-    //testing a null wave as a default
+    /**
+     * testing a null wave as a default
+     */
+
     @Test
     public void testEmptyWave() {
         double [] lchannel = new double [0];
@@ -33,7 +39,9 @@ public class BasicTests {
         Assert.assertArrayEquals(rchannel, rchannel1, 0.00001);
     }
 
-    //testing creating SoundWave object using the wave equation
+    /**
+     * testing creating SoundWave object using the wave equation
+     */
     @Test
     public void testWaveFromScratch() {
 
@@ -61,7 +69,9 @@ public class BasicTests {
         Assert.assertArrayEquals(lchannel, lchannel1, 0.00001);
     }
 
-    //testing append method using another SoundWave object
+    /**
+     * testing append method using another SoundWave object
+     */
     @Test
     public void testAppend() {
 
@@ -86,7 +96,9 @@ public class BasicTests {
 
     }
 
-    //testing append with an empty array and a duplicate array
+    /**
+     * testing append with an empty array and a duplicate array
+     */
     @Test
     public void testAppendEmpty() {
 
@@ -576,7 +588,9 @@ public class BasicTests {
         Assert.assertEquals(ans, similarity, 0.0001);
     }
 
-    //test similarity for when similarity is 1:
+    /**
+     * test similarity for when similarity is 1:
+     */
     @Test
     public void testSimilarityEqualsOne(){
         double[] rchannel1 = {0, 0, 0, 0};
@@ -592,7 +606,9 @@ public class BasicTests {
         Assert.assertEquals(ans, similarity, 0.000001);
     }
 
-    //test similarity for when beta is equal to zero:
+    /**
+     * test similarity for when beta is equal to zero:
+     */
 
     @Test
     public void testSimilarityBetaEqualsOne(){
