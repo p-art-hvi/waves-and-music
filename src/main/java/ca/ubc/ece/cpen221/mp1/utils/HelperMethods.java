@@ -93,6 +93,7 @@ public class HelperMethods {
 
             if (ComplexNumber.mod(temp) >= ComplexNumber.mod(highestFreqAmplitude)) {
                 highestFreq = freq;
+                highestFreqAmplitude = temp;
             }
         }
         return highestFreq;
